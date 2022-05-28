@@ -14,7 +14,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts');
+		$posts = Post::all();
+
+        return view('posts', ['posts' => $posts]);
     }
 
     /**
@@ -46,7 +48,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('post');
+        return view('post', ['post' => $post]);
     }
 
     /**
