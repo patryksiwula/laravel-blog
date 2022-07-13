@@ -20,6 +20,7 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
 			'content' => $this->faker->text(),
+			'image_path' => $this->faker->imageUrl(640, 480, null, false, 'Post', true),
 			'user_id' => User::all('id')->random()
         ];
     }
