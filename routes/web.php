@@ -14,10 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
+Route::redirect('/', '/posts')->name('home');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
 Route::middleware('auth')->group(function () {
@@ -26,18 +23,14 @@ Route::middleware('auth')->group(function () {
 	})->name('dashboard');
 
 	Route::view('/posts/create', 'posts.create-post')->name('posts.create');
-	Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-	Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-	Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-	Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+	Route::controller(PostController::class)->group(function () {
+		Route::get('/posts/{post}/edit', 'edit')->name('posts.edit');
+		Route::post('/posts', 'store')->name('posts.store');
+		Route::patch('/posts/{post}', 'update')->name('posts.update');
+		Route::delete('/posts/{post}', 'destroy')->name('posts.destroy');
+	});
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-
-//Route::resource('posts', PostController::class);
-
-/*Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');*/
-
 require __DIR__.'/auth.php';
