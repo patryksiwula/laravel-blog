@@ -18,7 +18,8 @@ return new class extends Migration
             $table->id();
 			$table->string('title');
 			$table->longText('content');
-			$table->string('image_path')->default('https://via.placeholder.com/640x480.png/CCCCCC?text=Post');
+			$table->string('image_path')->default('https://via.placeholder.com/860x300.png/CCCCCC?text=Post');
+			$table->string('thumbnail_path')->default('https://via.placeholder.com/368x240.png/CCCCCC?text=Post');
 			$table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
