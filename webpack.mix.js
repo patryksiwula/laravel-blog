@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const CopyPlugin = require("copy-webpack-plugin");
 
 /*
  |--------------------------------------------------------------------------
@@ -24,3 +25,4 @@ mix.webpackConfig({
 });
 
 mix.disableNotifications();
+mix.copyDirectory('vendor/tinymce/tinymce', 'public/js/tinymce');

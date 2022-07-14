@@ -16,7 +16,7 @@ class PostController extends Controller
     {
 		$posts = Post::with('user')->paginate(9);
 
-        return view('posts', [
+        return view('posts.posts', [
 			'posts' => $posts
 		]);
     }
@@ -28,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create-post');
     }
 
     /**
@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('post', ['post' => $post]);
+        return view('posts.single-post', ['post' => $post]);
     }
 
     /**

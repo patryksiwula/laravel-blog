@@ -8,7 +8,7 @@
 	<div class="py-12">
 		<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 			<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-				<div class="py-16 px-28 border-b border-gray-200">
+				<div class="py-16 px-10 sm:px-16 lg:px-28 border-b border-gray-200">
 					<div class="w-full flex justify-center">
 						<img src="{{ $post->image_path }}" alt="{{ __('image') }}" class="object-contain">
 					</div>
