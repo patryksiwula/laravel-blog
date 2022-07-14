@@ -575,9 +575,20 @@ h3{
 .col-span-1{
   grid-column: span 1 / span 1;
 }
+.float-left{
+  float: left;
+}
 .mx-auto{
   margin-left: auto;
   margin-right: auto;
+}
+.my-auto{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.my-4{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .ml-3{
   margin-left: 0.75rem;
@@ -636,11 +647,20 @@ h3{
 .mt-auto{
   margin-top: auto;
 }
+.mt-5{
+  margin-top: 1.25rem;
+}
+.mt-10{
+  margin-top: 2.5rem;
+}
 .block{
   display: block;
 }
 .inline-block{
   display: inline-block;
+}
+.inline{
+  display: inline;
 }
 .flex{
   display: flex;
@@ -675,14 +695,14 @@ h3{
 .h-8{
   height: 2rem;
 }
-.h-full{
-  height: 100%;
+.h-40{
+  height: 10rem;
+}
+.h-60{
+  height: 15rem;
 }
 .min-h-screen{
   min-height: 100vh;
-}
-.min-h-full{
-  min-height: 100%;
 }
 .w-5{
   width: 1.25rem;
@@ -723,21 +743,6 @@ h3{
 .shrink-0{
   flex-shrink: 0;
 }
-.flex-grow{
-  flex-grow: 1;
-}
-.grow{
-  flex-grow: 1;
-}
-.basis-1\/2{
-  flex-basis: 50%;
-}
-.basis-1{
-  flex-basis: 0.25rem;
-}
-.basis-1\/3{
-  flex-basis: 33.333333%;
-}
 .origin-top-left{
   transform-origin: top left;
 }
@@ -772,29 +777,11 @@ h3{
 .grid-cols-1{
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
-.grid-cols-3{
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.flex-row{
-  flex-direction: row;
-}
 .flex-col{
   flex-direction: column;
 }
-.flex-wrap{
-  flex-wrap: wrap;
-}
-.content-center{
-  align-content: center;
-}
-.content-end{
-  align-content: flex-end;
-}
 .items-center{
   align-items: center;
-}
-.items-stretch{
-  align-items: stretch;
 }
 .justify-end{
   justify-content: flex-end;
@@ -888,20 +875,20 @@ h3{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
-.bg-purple-200{
-  --tw-bg-opacity: 1;
-  background-color: rgb(233 213 255 / var(--tw-bg-opacity));
-}
-.bg-gray-400{
-  --tw-bg-opacity: 1;
-  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
-}
-.bg-gray-200{
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
 .fill-current{
   fill: currentColor;
+}
+.object-contain{
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.object-cover{
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.object-fill{
+  -o-object-fit: fill;
+     object-fit: fill;
 }
 .p-2{
   padding: 0.5rem;
@@ -911,6 +898,12 @@ h3{
 }
 .p-5{
   padding: 1.25rem;
+}
+.p-8{
+  padding: 2rem;
+}
+.p-10{
+  padding: 2.5rem;
 }
 .px-4{
   padding-left: 1rem;
@@ -952,6 +945,22 @@ h3{
   padding-left: 0px;
   padding-right: 0px;
 }
+.px-12{
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+.px-20{
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+.px-28{
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
+.py-16{
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
 .pt-1{
   padding-top: 0.25rem;
 }
@@ -988,6 +997,12 @@ h3{
 .text-right{
   text-align: right;
 }
+.align-baseline{
+  vertical-align: baseline;
+}
+.align-middle{
+  vertical-align: middle;
+}
 .font-sans{
   font-family: Nunito, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -1017,6 +1032,9 @@ h3{
 .font-semibold{
   font-weight: 600;
 }
+.font-bold{
+  font-weight: 700;
+}
 .uppercase{
   text-transform: uppercase;
 }
@@ -1031,6 +1049,15 @@ h3{
 }
 .leading-loose{
   line-height: 2;
+}
+.leading-none{
+  line-height: 1;
+}
+.leading-normal{
+  line-height: 1.5;
+}
+.leading-relaxed{
+  line-height: 1.625;
 }
 .tracking-widest{
   letter-spacing: 0.1em;
@@ -1376,12 +1403,6 @@ h3{
   }
 }
 @media (min-width: 768px){
-  .md\:w-1\/2{
-    width: 50%;
-  }
-  .md\:basis-1\/2{
-    flex-basis: 50%;
-  }
   .md\:grid-cols-2{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1393,18 +1414,16 @@ h3{
   }
 }
 @media (min-width: 1024px){
-  .lg\:w-1\/3{
-    width: 33.333333%;
-  }
-  .lg\:basis-1\/3{
-    flex-basis: 33.333333%;
-  }
   .lg\:grid-cols-3{
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .lg\:px-8{
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+  .lg\:px-12{
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
   .lg\:pb-20{
     padding-bottom: 5rem;

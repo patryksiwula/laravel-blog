@@ -22,3 +22,5 @@ mix.webpackConfig({
         children: true,
     },
 });
+
+mix.disableNotifications();
