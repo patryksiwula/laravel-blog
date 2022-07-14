@@ -15,7 +15,7 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
-		<x-tinymce.tinymce-config />
+		<script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -33,5 +33,17 @@
                 {{ $slot }}
             </main>
         </div>
+
+		<script>
+			(function() {
+				var toolbar = `undo redo | formatselect | bold italic | foreColor | alignleft aligncenter alignright alignjustify |
+								indent outdent | bullist numlist | blockquote | code | image | table`;
+				tinymce.init({
+					selector: '.tinymce', // Replace this CSS selector to match the placeholder element for TinyMCE
+					plugins: 'image code table lists',
+					toolbar: toolbar
+				});
+			})();
+		</script>
     </body>
 </html>
