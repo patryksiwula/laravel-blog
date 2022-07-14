@@ -770,6 +770,9 @@ h3{
 .cursor-default{
   cursor: default;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
 .list-inside{
   list-style-position: inside;
 }
@@ -896,6 +899,10 @@ h3{
 .bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+.bg-lime-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(101 163 13 / var(--tw-bg-opacity));
 }
 .fill-current{
   fill: currentColor;
@@ -1209,6 +1216,69 @@ h3{
 .ease-in{
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
+.file\:mr-5::-webkit-file-upload-button{
+  margin-right: 1.25rem;
+}
+.file\:mr-5::file-selector-button{
+  margin-right: 1.25rem;
+}
+.file\:border-collapse::-webkit-file-upload-button{
+  border-collapse: collapse;
+}
+.file\:border-collapse::file-selector-button{
+  border-collapse: collapse;
+}
+.file\:cursor-pointer::-webkit-file-upload-button{
+  cursor: pointer;
+}
+.file\:cursor-pointer::file-selector-button{
+  cursor: pointer;
+}
+.file\:border-0::-webkit-file-upload-button{
+  border-width: 0px;
+}
+.file\:border-0::file-selector-button{
+  border-width: 0px;
+}
+.file\:border-r::-webkit-file-upload-button{
+  border-right-width: 1px;
+}
+.file\:border-r::file-selector-button{
+  border-right-width: 1px;
+}
+.file\:border-solid::-webkit-file-upload-button{
+  border-style: solid;
+}
+.file\:border-solid::file-selector-button{
+  border-style: solid;
+}
+.file\:bg-\[\#F5F7FD\]::-webkit-file-upload-button{
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 247 253 / var(--tw-bg-opacity));
+}
+.file\:bg-\[\#F5F7FD\]::file-selector-button{
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 247 253 / var(--tw-bg-opacity));
+}
+.file\:py-3::-webkit-file-upload-button{
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.file\:py-3::file-selector-button{
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.file\:px-5::-webkit-file-upload-button{
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.file\:px-5::file-selector-button{
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.hover\:cursor-pointer:hover{
+  cursor: pointer;
+}
 .hover\:border-gray-300:hover{
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1247,6 +1317,12 @@ h3{
 .hover\:text-gray-900:hover{
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+.file\:hover\:bg-opacity-10:hover::-webkit-file-upload-button{
+  --tw-bg-opacity: 0.1;
+}
+.file\:hover\:bg-opacity-10:hover::file-selector-button{
+  --tw-bg-opacity: 0.1;
 }
 .focus\:z-10:focus{
   z-index: 10;
@@ -1475,6 +1551,10 @@ h3{
   .xl\:px-6{
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+  .xl\:px-10{
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
   .xl\:text-2xl{
     font-size: 1.5rem;

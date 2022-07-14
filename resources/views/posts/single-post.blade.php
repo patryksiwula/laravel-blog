@@ -10,23 +10,37 @@
 			<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 				<div class="py-16 px-10 sm:px-16 lg:px-28 border-b border-gray-200">
 					<div class="w-full flex justify-center">
-						<img src="{{ $post->image_path }}" alt="{{ __('image') }}" class="object-contain">
+						@if ($post->image_path === 'https://via.placeholder.com/860x300.png/CCCCCC?text=Post')
+							<img src="{{ $post->image_path }}" alt="{{ __('image') }}" class="object-contain">
+						@else
+							<img src="{{ asset('storage/uploads/' . $post->image_path) }}" alt="{{ __('image') }}" class="object-contain">
+						@endif
 					</div>
 					
 					<div class="w-full flex items-center align-middle mt-10">
-							<img src="{{ $post->user->thumbnail_xs_path }}" alt="" class="float-left">
-							<span class="block float-left rounded px-0 font-semibold leading-none ml-2 text-xl">
-								{{ $post->user->name }}
-							</span>
+						<img src="{{ $post->user->thumbnail_xs_path }}" alt="" class="float-left">
+						<span class="block float-left rounded px-0 font-semibold leading-none ml-2 text-xl">
+							{{ $post->user->name }}
+						</span>
 					</div>
 
 					<div class="mt-6">
 						<h1 class="font-semibold">{{ $post->title }}</h1>
 
 						<p class="mt-5">
-							{{ $post->content }}
+							{!! $post->content !!}
 						</p>
 					</div>
+					
+					@auth
+						@if ($post->user->id == Auth::user()->id)
+							<div class="mt-6">
+								<a href="{{ route('posts.edit', ['post' => $post]) }}" class="py-2 px-6 lg:px-4 xl:px-6 inline-flex items-center justify-center text-center text-white text-base text-lg hover:bg-opacity-90 font-normal rounded-full bg-lime-500 mr-3">
+									{{ __('Edit post') }}
+								</a>
+							</div>
+						@endif
+					@endauth
 
 					<div class="mt-6 text-right text-sm">
 						{{ __('Created') }}: {{ $post->created_at->format('d.m.Y, h:i:s') }}

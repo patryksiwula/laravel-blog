@@ -16,7 +16,11 @@
 									<div class="col-span-1 flex flex-col">
 										<div class="max-w-[370px] mx-auto mb-10 border shadow-lg rounded">
 											<div class="rounded overflow-hidden">
-												<img src="{{ $post->thumbnail_path }}" alt="{{ __('image') }}" class="w-full h-60 object-cover" />
+												@if ($post->thumbnail_path === 'https://via.placeholder.com/368x240.png/CCCCCC?text=Post')
+													<img src="{{ $post->thumbnail_path }}" alt="{{ __('image') }}" class="w-full h-60 object-cover" />
+												@else
+													<img src="{{ asset('storage/uploads/thumbnails/' . $post->thumbnail_path) }}" alt="{{ __('image') }}" class="w-full h-60 object-cover" />
+												@endif
 											</div>
 											<div class="w-full p-5">
 												<div class="w-full flex justify-between items-center align-middle">
@@ -36,7 +40,7 @@
 													</h3>
 												</div>
 												<div class="mt-auto text-base text-body-color">
-													{{ substr($post->content, 0, 120) }}...
+													{!! substr($post->content, 0, 120) !!}...
 												</div>
 											</div>
 										</div>
