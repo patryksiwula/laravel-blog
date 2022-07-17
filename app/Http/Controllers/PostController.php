@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class PostController extends Controller
@@ -125,6 +126,7 @@ class PostController extends Controller
 			$post->thumbnail_path = $thumbnail;
 		}
 
+		$post->updated_by = Auth::user()->id;
 		$post->save();
 
 		return redirect()->route('posts.show', [

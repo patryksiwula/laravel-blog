@@ -47,7 +47,14 @@
 					@endif
 
 					<div class="mt-6 text-right text-sm">
-						{{ __('Created') }}: {{ $post->created_at->format('d.m.Y, h:i:s') }}
+						{{ __('Created') . ': ' . $post->created_at->format('d.m.Y, h:i') }}
+
+						@if ($post->updated_at != $post->created_at)
+							<br>
+							{{ __('Last updated') . ': ' . $post->updated_at->format('d.m.Y, h:i') . ' ' . __('by') . ': ' }}
+							<!-- CHANGE URL TO POINT TO USER'S PROFILE WHEN FINISHED DEFINING ROUTES -->
+							<a href="#">{{ $post->updatedByUser->name }}</a> 
+						@endif
 					</div>
 				</div>
 			</div>
