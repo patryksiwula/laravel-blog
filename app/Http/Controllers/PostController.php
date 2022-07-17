@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Image;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PostController extends Controller
-{
+{  
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(): View
     {
 		$posts = Post::with('user')->paginate(9);
 
@@ -21,14 +23,14 @@ class PostController extends Controller
 			'posts' => $posts
 		]);
     }
-
+   
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse;
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
 		$validate = $request->validate([
 			'post_title' => 'required|max:255',
@@ -48,7 +50,7 @@ class PostController extends Controller
 		
 		// Generate thumbnail
 		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-		$this->createThumbnail($thumbnailPath, 368, 240);
+		$this->generateThumbnail($thumbnailPath, 368, 240);
 
 		$post = new Post();
 		$post->title = $request->input('post_title');
@@ -63,14 +65,14 @@ class PostController extends Controller
 			'message' => 'created'
 		]);
     }
-
+  
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function show(Post $post)
+    public function show(Post $post): View
     {
         return view('posts.single-post', ['post' => $post]);
     }
@@ -110,13 +112,14 @@ class PostController extends Controller
     }
 
 	/**
- 	 * Create a thumbnail of specified size
- 	 *
- 	 * @param string $path path of thumbnail
- 	 * @param int $width
- 	 * @param int $height
- 	 */
-	public function createThumbnail($path, $width, $height)
+	 * Generate a thumbnail of specified size
+	 *
+	 * @param  string $path path of thumbnail
+	 * @param  int $width
+	 * @param  int $height
+	 * @return void
+	 */	
+	public function generateThumbnail(string $path, int $width, int $height): void
 	{
     	$img = Image::make($path)->resize($width, $height)
 			->save($path);
