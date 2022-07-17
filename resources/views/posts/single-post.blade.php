@@ -39,10 +39,13 @@
 								{{ __('Edit post') }}
 							</a>
 
-							<a href="{{ route('posts.destroy', ['post' => $post]) }}" class="py-2 px-4 inline-flex items-center justify-center
-								text-center text-white text-lg bg-red-600 hover:bg-opacity-90 font-normal rounded-md">
-								{{ __('Delete post') }}
-							</a>
+							<form method="POST" action="{{ route('posts.destroy', ['post' => $post]) }}" class="inline-flex items-center justify-center">
+								@csrf
+								@method('DELETE')
+
+								<input type="submit" value="{{ __('Delete post') }}" class="py-2 px-4 text-center text-white text-lg bg-red-600
+									hover:bg-opacity-90 font-normal rounded-md cursor-pointer">
+							</form>
 						</div>
 					@endif
 

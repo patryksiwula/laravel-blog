@@ -29,7 +29,7 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse;
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -40,7 +40,9 @@ class PostController extends Controller
 		]);
 
         if (!$request->file('post_image'))
-			return redirect()->route('posts.create', ['message' => 'no_image']);
+			return redirect()
+				->route('posts.create')
+				->with('message', 'no_image');
 		
 		// Upload image
 		$image = $request->file('post_image');
@@ -61,10 +63,9 @@ class PostController extends Controller
 		$post->user_id = $request->user()->id;
 		$post->save();
 
-		return redirect()->route('posts.show', [
-			'post' => $post,
-			'message' => 'created'
-		]);
+		return redirect()
+			->route('posts.show', ['post' => $post])
+			->with('action', 'post_created');
     }
   
     /**
@@ -94,7 +95,7 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Post $post): RedirectResponse
     {
@@ -129,21 +130,24 @@ class PostController extends Controller
 		$post->updated_by = Auth::user()->id;
 		$post->save();
 
-		return redirect()->route('posts.show', [
-			'post' => $post,
-			'message' => 'updated'
-		]);
+		return redirect()
+			->route('posts.show', ['post' => $post,])
+			->with('action', 'post_updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+		
+		return redirect()
+			->route('posts.index')
+			->with('action', 'post_deleted');
     }
 
 	/**
