@@ -1,15 +1,12 @@
 <x-app-layout>
-	<x-slot name="header">
-		<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-			{{ __('Posts') }}
-		</h2>
-	</x-slot>
-
 	<div class="py-12">
 		<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 			<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 				<div class="p-6 border-b border-gray-200">
-					<section class="pb-10 lg:pb-20">
+					<h1 class="font-bold text-center leading-tight">
+						{{ __('Posts') }}
+					</h2>
+					<section class="mt-10 pb-10 lg:pb-20">
 						<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 							@foreach ($posts as $post)
 								<a href="{{ route('posts.show', ['post' => $post]) }}">
@@ -40,7 +37,11 @@
 													</h3>
 												</div>
 												<div class="mt-auto text-base text-body-color">
-													{!! substr($post->content, 0, 120) !!}...
+													@if (substr($post->content, 119, 120) === '.')
+														{!! substr($post->content, 0, 120) . '..' !!}
+													@else
+														{!! substr($post->content, 0, 120) . '...' !!}
+													@endif
 												</div>
 											</div>
 										</div>
