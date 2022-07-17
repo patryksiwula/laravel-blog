@@ -81,11 +81,11 @@ class PostController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Post $post)
+    public function edit(Post $post): View
     {
-        //
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
@@ -95,9 +95,42 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post): RedirectResponse
     {
-        //
+        $validate = $request->validate([
+			'post_title' => 'min:6|max:255',
+			'post_image' => 'image|mimes:png,jpg,bmp,gif'
+		]);
+		
+		// Only update the fields in the database if they have been changed
+		if ($post->title !== $request->input('post_title'))
+			$post->title = $request->input('post_title');
+		
+		if ($post->content !== $request->input('post_content'))
+			$post->content = $request->input('post_content');
+
+		if ($request->file('post_image'))
+		{
+			$image = $request->file('post_image');
+			$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
+			$thumbnail = 'thumbnail_' . $fileName;
+			$image->storeAs('public/uploads', $fileName);
+			$image->storeAs('public/uploads/thumbnails', $thumbnail);
+			
+			// Generate thumbnail
+			$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
+			$this->generateThumbnail($thumbnailPath, 368, 240);
+
+			$post->image_path = $fileName;
+			$post->thumbnail_path = $thumbnail;
+		}
+
+		$post->save();
+
+		return redirect()->route('posts.show', [
+			'post' => $post,
+			'message' => 'updated'
+		]);
     }
 
     /**
