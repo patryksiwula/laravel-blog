@@ -16,20 +16,52 @@
 									</div>
 								</div>
 							</div>
-
+							
 							<div class="mt-10">
 								<h1 class="font-bold">
-									{{ __('User\'s posts') }}
+									{{ __('Posts') }}
 								</h1>
 
 								<div class="mt-3">
-									@foreach ($user->posts as $post)
-										<a href="{{ route('posts.show', ['post' => $post]) }}">
-											<h2>{{ $post->title }}</h2>
-										</a>
+									@foreach ($posts as $post)
+										<div class="flex flex-col md:flex-row w-full px-5 py-10 border-2 rounded-3xl mb-5 last:mb-0 shadow-md">
+											@if ($post->thumbnail_path === 'https://via.placeholder.com/368x240.png/CCCCCC?text=Post')
+												<img src="{{ $post->thumbnail_path }}" alt="{{ $post->title }}" class="w-full md:w-auto max-h-full md:max-h-48 rounded-3xl">
+											@else
+												<img src="{{ asset('storage/uploads/thumbnails/' . $post->thumbnail_path) }}" alt="{{ $post->title }}" class="w-full md:w-auto max-h-full md:max-h-48 rounded-3xl">
+											@endif
 
-										<br>
+											<div class="md:ml-5">
+												<a href="{{ route('posts.show', ['post' => $post]) }}">
+													<h1 class="mt-5 md:mt-0 text-2xl font-semibold">{{ $post->title }}</h1>
+												</a>
+
+												<div class="mt-5">
+													@if (substr($post->content, 239, 240) === '.')
+														{!! substr($post->content, 0, 240) . '..' !!}
+													@else
+														{!! substr($post->content, 0, 240) . '...' !!}
+													@endif
+
+													<a href="{{ route('posts.show', ['post' => $post]) }}">
+														<h2 class="mt-5">{{ __('Continue reading') . '...' }}</h2>
+													</a>
+
+													<div class="mt-5 text-right text-xs">
+														{{ __('Created by') . ': ' . $post->user->name }}
+														<br>
+														{{ $post->created_at->format('d.m.Y, h:i') }}
+													</div>
+												</div>
+											</div>
+	
+											<br>
+										</div>
 									@endforeach
+								</div>
+
+								<div class="mt-10">
+									{{ $posts->links() }}
 								</div>
 							</div>
 						</div>

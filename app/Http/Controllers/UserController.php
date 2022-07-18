@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
+use App\Models\Post;
 
 class UserController extends Controller
 {
@@ -16,7 +17,8 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        return view('users.profile', ['user' => $user]);
+		$posts = $user->posts()->with('user')->paginate(5);
+        return view('users.profile', ['user' => $user, 'posts' => $posts]);
     }
 
 	/**
