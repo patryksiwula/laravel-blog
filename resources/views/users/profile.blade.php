@@ -11,8 +11,19 @@
 	
 									<div class="mt-6 text-center">
 										<h1>{{ $user->name }}</h1>
-										Website <br>
-										Github
+
+										@if ($user->website)
+											<a href="{{ $user->website }}" target="_blank">
+												{{ __('Website') }}
+											</a>
+											<br>
+										@endif
+
+										@if ($user->github)
+											<a href="{{ $user->github }}" target="_blank">
+												{{ __('Github') }}
+											</a>
+										@endif
 									</div>
 								</div>
 							</div>
