@@ -5,7 +5,7 @@
 				<div class="p-6 border-b border-gray-200">
 					<h1 class="font-bold text-center leading-tight">
 						{{ __('Posts') }}
-					</h2>
+					</h1>
 					<section class="mt-10 pb-10 lg:pb-20">
 						<div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 							@foreach ($posts as $post)
