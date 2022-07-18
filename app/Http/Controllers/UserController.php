@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -31,4 +32,20 @@ class UserController extends Controller
     {
         return view('users.edit', ['user' => $user]);
     }
+
+	/**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, User $user): RedirectResponse
+    {
+		return redirect()->route('users.show')
+			->with([
+				'user' => $user,
+				'message' => 'profile_updated'
+			]);
+	}
 }

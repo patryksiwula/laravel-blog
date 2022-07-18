@@ -131,7 +131,7 @@ class PostController extends Controller
 		$post->save();
 
 		return redirect()
-			->route('posts.show', ['post' => $post,])
+			->route('posts.show', ['post' => $post])
 			->with('action', 'post_updated');
     }
 

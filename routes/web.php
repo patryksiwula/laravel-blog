@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 	Route::group(['prefix' => 'users', 'controller' => UserController::class], function() {
 		Route::get('{user}', 'show')->name('users.show');
 		Route::get('{user}/edit', 'edit')->name('users.edit');
+		Route::patch('{user}', 'update')->name('users.update');
 	});
 
 	Route::view('/posts/create', 'posts.create-post')->name('posts.create');
