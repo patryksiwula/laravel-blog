@@ -5,16 +5,19 @@
             <div class="flex">
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:flex">
-					<x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts*')">
+					<x-nav-link :href="route('posts.index')" :active="request()->is('posts*')">
                         {{ __('Posts') }}
                     </x-nav-link>
 
 					@auth
-					<x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+					<x-nav-link :href="route('dashboard')" :active="request()->is('dashboard')">
 						{{ __('Dashboard') }}
 					</x-nav-link>
-					<x-nav-link :href="route('users.show', ['user' => Auth::user()])" :active="request()->routeIs('users*')">
+					<x-nav-link :href="route('users.show', ['user' => Auth::user()])" :active="request()->is('users/*')">
                         {{ __('Profile') }}
+                    </x-nav-link>
+					<x-nav-link :href="route('users.index')" :active="request()->is('users')">
+                        {{ __('Users') }}
                     </x-nav-link>
 					@endauth
                 </div>
@@ -44,7 +47,7 @@
 							<x-dropdown-link :href="route('users.edit', ['user' => Auth::user()])">
 								{{ __('Edit profile') }}
 							</x-dropdown-link>
-							
+
 							<!-- Authentication -->
 							<form method="POST" action="{{ route('logout') }}">
 								@csrf
