@@ -28,6 +28,27 @@
 												{{ __('Github') }}
 											</a>
 										@endif
+
+										<div class="flex mt-5">
+											@can('update', $user)
+												<a href="{{ route('users.edit', ['user' => $user]) }}" class="flex-inline mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center
+													justify-center text-center text-white text-xl bg-lime-600 hover:bg-opacity-90 font-normal rounded-md
+													hover:cursor-pointer">
+													{{ __('Edit profile') }}
+												</a>
+											@endcan
+
+											@can('delete', $user)
+												<form method="POST" action="{{ route('users.destroy', ['user' => $user]) }}" class="ml-2">
+													@csrf
+													@method('DELETE')
+
+													<input type="submit" value="{{ __('Delete user') }}" class="flex-inline mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex
+														items-center justify-center text-center text-white text-xl bg-red-800 hover:bg-opacity-90 font-normal
+														rounded-md hover:cursor-pointer">
+												</form>
+											@endcan
+										</div>
 									</div>
 								</div>
 							</div>

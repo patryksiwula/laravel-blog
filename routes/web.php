@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 		Route::get('{user}/edit/', 'edit')->name('users.edit');
 		Route::get('{user}', 'show')->name('users.show');
 		Route::patch('{user}', 'update')->name('users.update');
+		Route::delete('{user}', 'destroy')->name('users.destroy');
 	});
 
 	Route::view('/posts/create', 'posts.create-post')->name('posts.create');
