@@ -18,6 +18,7 @@ class UserController extends Controller
      */
     public function index(): View
     {
+		$this->authorize('viewAny');
 		$users = User::paginate(15);
 
         return view('users.index', $users);
@@ -31,6 +32,8 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+		$this->authorize('update', $user);
+
         return view('users.edit', ['user' => $user]);
     }
 
@@ -43,6 +46,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+		$this->authorize('update', $user);
+
         $validate = $request->validate([
 			'user_image' => 'image|mimes:png,jpg,bmp,gif|dimensions:width=200,height=200',
 			'user_name' => 'min:6|max:64',
@@ -96,6 +101,7 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
+		$this->authorize('delete', $user);
         $user->delete();
 
 		return redirect()->route('users.index')
