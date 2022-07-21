@@ -67,7 +67,7 @@
 												<img src="{{ asset('storage/uploads/thumbnails/' . $post->thumbnail_path) }}" alt="{{ $post->title }}" class="w-full md:w-auto max-h-full md:max-h-48 rounded-3xl">
 											@endif
 
-											<div class="md:ml-5">
+											<div class="md:ml-5 w-full">
 												<a href="{{ route('posts.show', ['post' => $post]) }}">
 													<h1 class="mt-5 md:mt-0 text-2xl font-semibold">{{ $post->title }}</h1>
 												</a>
