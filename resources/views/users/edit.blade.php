@@ -7,7 +7,7 @@
 					<section class="mt-10 pb-10 lg:pb-20">
 						<div class="container mx-auto">
 							<div class="w-full">
-								<form method="POST" action="{{ route('users.update', ['user' => Auth::user()->id]) }}" enctype="multipart/form-data">
+								<form method="POST" action="{{ route('users.update', ['user' => $user]) }}" enctype="multipart/form-data">
 									@csrf
 									@method('PATCH')
 
