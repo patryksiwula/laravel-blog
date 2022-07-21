@@ -7,8 +7,12 @@
 						<div class="container mx-auto">
 							<div class="flex justify-center">
 								<div class="flex-col">
-									<img src="{{ $user->image_path }}" alt="{{ $user->name }}" class="mx-auto max-w-50 h-auto rounded-full">
-	
+									@if ($user->image_path == 'https://via.placeholder.com/200x200.png/CCCCCC?text=User')
+										<img src="{{ $user->image_path }}" alt="{{ $user->name }}" class="mx-auto max-w-50 h-auto rounded-full">
+									@else
+										<img src="{{ asset('storage/uploads/profiles/' . $user->image_path) }}" alt="{{ $user->name }}" class="mx-auto max-w-50 h-auto rounded-full">
+									@endif
+										
 									<div class="mt-6 text-center">
 										<h1>{{ $user->name }}</h1>
 
