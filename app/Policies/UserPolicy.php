@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function update(User $user, User $targetUser)
     {
-        return $user->is_admin || (auth()->check() && $user->id == $targetUser->id);
+        return $user->is_admin || (auth()->check() && auth()->id() == $targetUser->id);
     }
 
     /**
