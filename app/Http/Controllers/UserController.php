@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\GenerateThumbnail;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Contracts\View\View;
 use App\Models\User;
 use App\Services\UserService;
@@ -56,16 +56,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, User $user, UserService $userService, GenerateThumbnail $generateThumbnail): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user, UserService $userService, GenerateThumbnail $generateThumbnail): RedirectResponse
     {
 		$this->authorize('update', $user);
-
-		$validate = $request->validate([
-			'user_image' => 'image|mimes:png,jpg,bmp,gif|dimensions:width=200,height=200',
-			'user_name' => 'min:6|max:64',
-			'user_website' => 'url|nullable',
-			'user_github' => 'url|nullable'
-		]);
 		
 		$userService->updateUser(
 			$user->id,

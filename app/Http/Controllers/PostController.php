@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\GenerateThumbnail;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {  
@@ -31,14 +32,8 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
+    public function store(StorePostRequest $request, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
     {
-		$validate = $request->validate([
-			'post_title' => 'required|max:255',
-			'post_content' => 'required',
-			'post_image' => 'required|image|mimes:png,jpg,bmp,gif'
-		]);
-
         $post = $postService->createPost(
 			$request->input('post_title'),
 			$request->input('post_content'),
@@ -82,14 +77,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Post $post, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
+    public function update(UpdatePostRequest $request, Post $post, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
     {
 		$this->authorize('update', $post);
-
-        $validate = $request->validate([
-			'post_title' => 'min:6|max:255',
-			'post_image' => 'image|mimes:png,jpg,bmp,gif'
-		]);
 
 		$postService->updatePost(
 			$post->id, 
