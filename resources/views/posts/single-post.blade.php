@@ -18,7 +18,7 @@
 					</div>
 					
 					<div class="w-full flex items-center align-middle mt-10">
-						<img src="{{ $post->user->thumbnail_xs_path }}" alt="" class="float-left">
+						<img src="{{ asset('storage/uploads/profiles/thumbnails_xs/' . $post->user->thumbnail_xs_path) }}" alt="" class="float-left rounded-full">
 						<span class="block float-left rounded px-0 font-semibold leading-none ml-2 text-xl">
 							{{ $post->user->name }}
 						</span>
