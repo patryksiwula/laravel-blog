@@ -32,24 +32,24 @@
 						</p>
 					</div>
 					
-					@auth
-						@if ($post->user->id == Auth::user()->id)
-							<div class="mt-6">
-								<a href="{{ route('posts.edit', ['post' => $post]) }}" class="py-2 px-4 inline-flex items-center justify-center text-center
-									text-white text-lg bg-lime-500 hover:bg-opacity-90 font-normal rounded-md">
-									{{ __('Edit post') }}
-								</a>
+					<div class="mt-6">
+						@can('update', $post)
+							<a href="{{ route('posts.edit', ['post' => $post]) }}" class="py-2 px-4 inline-flex items-center justify-center text-center
+								text-white text-lg bg-lime-500 hover:bg-opacity-90 font-normal rounded-md">
+								{{ __('Edit post') }}
+							</a>
+						@endcan
 
-								<form method="POST" action="{{ route('posts.destroy', ['post' => $post]) }}" class="inline-flex items-center justify-center">
-									@csrf
-									@method('DELETE')
+						@can('delete', $post)
+							<form method="POST" action="{{ route('posts.destroy', ['post' => $post]) }}" class="inline-flex items-center justify-center">
+								@csrf
+								@method('DELETE')
 
-									<input type="submit" value="{{ __('Delete post') }}" class="py-2 px-4 text-center text-white text-lg bg-red-600
-										hover:bg-opacity-90 font-normal rounded-md cursor-pointer">
-								</form>
-							</div>
-						@endif
-					@endauth
+								<input type="submit" value="{{ __('Delete post') }}" class="py-2 px-4 text-center text-white text-lg bg-red-600
+									hover:bg-opacity-90 font-normal rounded-md cursor-pointer">
+							</form>
+						@endcan
+					</div>
 
 					<div class="mt-6 text-right text-sm">
 						{{ __('Created') . ': ' . $post->created_at->format('d.m.Y, h:i') }}
