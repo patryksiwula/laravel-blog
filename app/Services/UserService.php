@@ -8,7 +8,14 @@ use \Illuminate\Http\UploadedFile;
 
 class UserService
 {
-	public function updateUser(int $id, string $name, ?string $website, ?string $github, ?UploadedFile $file, GenerateThumbnail $generateThumbnail): void
+	/**
+	 * Constructor method
+	 *
+	 * @param  \App\Actions\GenerateThumbnail $generateThumbnail
+	 */
+	public function __construct(private GenerateThumbnail $generateThumbnail) { }
+
+	public function updateUser(int $id, string $name, ?string $website, ?string $github, ?UploadedFile $file): void
 	{
 		$user = User::find($id);
 
@@ -35,8 +42,8 @@ class UserService
 			// Generate thumbnails
 			$thumbnailPathSm = public_path('storage/uploads/profiles/thumbnails_sm/' . $thumbnailSm);
 			$thumbnailPathXs = public_path('storage/uploads/profiles/thumbnails_xs/' . $thumbnailXs);
-			$generateThumbnail->handle($thumbnailPathSm, 100, 100);
-			$generateThumbnail->handle($thumbnailPathXs, 40, 40);
+			$this->generateThumbnail->handle($thumbnailPathSm, 100, 100);
+			$this->generateThumbnail->handle($thumbnailPathXs, 40, 40);
 
 			$user->image_path = $fileName;
 			$user->thumbnail_sm_path = $thumbnailSm;

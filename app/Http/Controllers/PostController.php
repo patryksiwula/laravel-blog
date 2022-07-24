@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\GenerateThumbnail;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
@@ -32,13 +31,12 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StorePostRequest $request, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
+    public function store(StorePostRequest $request, PostService $postService): RedirectResponse
     {
         $post = $postService->createPost(
 			$request->input('post_title'),
 			$request->input('post_content'),
-			$request->file('post_image'),
-			$generateThumbnail
+			$request->file('post_image')
 		);
 
 		return redirect()
@@ -77,7 +75,7 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdatePostRequest $request, Post $post, PostService $postService, GenerateThumbnail $generateThumbnail): RedirectResponse
+    public function update(UpdatePostRequest $request, Post $post, PostService $postService): RedirectResponse
     {
 		$this->authorize('update', $post);
 
@@ -85,8 +83,7 @@ class PostController extends Controller
 			$post->id, 
 			$request->input('post_title'), 
 			$request->input('post_content'), 
-			$request->file('post_image'),
-			$generateThumbnail
+			$request->file('post_image')
 		);
 
 		return redirect()

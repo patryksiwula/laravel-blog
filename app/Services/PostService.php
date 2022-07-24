@@ -7,7 +7,14 @@ use \App\Models\Post;
 use \Illuminate\Http\UploadedFile;
 
 class PostService
-{		
+{			
+	/**
+	 * Constructor method
+	 *
+	 * @param  \App\Actions\GenerateThumbnail $generateThumbnail
+	 */
+	public function __construct(private GenerateThumbnail $generateThumbnail) { }
+
 	/**
 	 * Create a new post
 	 *
@@ -16,7 +23,7 @@ class PostService
 	 * @param  \Illuminate\Http\UploadedFile $file
 	 * @return Post
 	 */
-	public function createPost(string $title, string $content, UploadedFile $file, GenerateThumbnail $generateThumbnail): Post
+	public function createPost(string $title, string $content, UploadedFile $file): Post
 	{
 		// Upload image
 		$image = $file;
@@ -27,7 +34,7 @@ class PostService
 		
 		// Generate thumbnail
 		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-		$generateThumbnail->handle($thumbnailPath, 368, 240);
+		$this->generateThumbnail->handle($thumbnailPath, 368, 240);
 
 		$post = new Post();
 		$post->title = $title;
@@ -48,7 +55,7 @@ class PostService
 	 * @param  \Illuminate\Http\UploadedFile|null $file
 	 * @return void
 	 */
-	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, GenerateThumbnail $generateThumbnail): void
+	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file): void
 	{
 		$post = Post::find($id);
 
@@ -69,7 +76,7 @@ class PostService
 			
 			// Generate thumbnail
 			$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-			$generateThumbnail->handle($thumbnailPath, 368, 240);
+			$this->generateThumbnail->handle($thumbnailPath, 368, 240);
 
 			$post->image_path = $fileName;
 			$post->thumbnail_path = $thumbnail;
