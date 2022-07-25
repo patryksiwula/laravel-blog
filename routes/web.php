@@ -33,8 +33,9 @@ Route::middleware('auth')->group(function () {
 		'create', 'index', 'show'
 	]);
 
+	Route::view('/posts/{post}/comments/create')->name('posts.comments.create');
 	Route::resource('posts.comments', CommentController::class)->except([
-		'index', 'show'
+		'create', 'index', 'show'
 	]);
 });
 
