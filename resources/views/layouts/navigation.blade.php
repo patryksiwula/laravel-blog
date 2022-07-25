@@ -10,15 +10,18 @@
                     </x-nav-link>
 
 					@auth
-					<x-nav-link :href="route('dashboard')" :active="request()->is('dashboard')">
-						{{ __('Dashboard') }}
-					</x-nav-link>
-					<x-nav-link :href="route('users.show', ['user' => Auth::user()])" :active="request()->is('users/*')">
-                        {{ __('Profile') }}
-                    </x-nav-link>
-					<x-nav-link :href="route('users.index')" :active="request()->is('users')">
-                        {{ __('Users') }}
-                    </x-nav-link>
+						<x-nav-link :href="route('dashboard')" :active="request()->is('dashboard')">
+							{{ __('Dashboard') }}
+						</x-nav-link>
+						<x-nav-link :href="route('users.show', ['user' => Auth::user()])" :active="request()->is('users/*')">
+							{{ __('Profile') }}
+						</x-nav-link>
+
+						@can('viewAny', Auth::user())
+							<x-nav-link :href="route('users.index')" :active="request()->is('users')">
+								{{ __('Users') }}
+							</x-nav-link>
+						@endcan
 					@endauth
                 </div>
             </div>
