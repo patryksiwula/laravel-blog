@@ -60,6 +60,37 @@
 							<a href="{{ route('users.show', ['user' => $post->updatedByUser]) }}">{{ $post->updatedByUser->name }}</a> 
 						@endif
 					</div>
+
+					<div class="w-full mt-10">
+						<h1>Comments</h1>
+
+						<div class="w-full flex mt-5">
+							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
+								float-left h-10">
+
+							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
+							</div>
+						</div>
+
+						<div class="w-full flex mt-5">
+							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
+								float-left h-10">
+
+							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
+							</div>
+						</div>
+
+						<div class="w-full flex mt-5">
+							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
+								float-left h-10">
+
+							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
