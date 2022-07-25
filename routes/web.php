@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,22 +24,18 @@ Route::middleware('auth')->group(function () {
 		return view('dashboard');
 	})->name('dashboard');
 
-	Route::group(['prefix' => 'users', 'controller' => UserController::class], function() {
-		Route::get('/', 'index')->name('users.index');
-		Route::get('{user}/edit/', 'edit')->name('users.edit');
-		Route::get('{user}', 'show')->name('users.show');
-		Route::patch('{user}', 'update')->name('users.update');
-		Route::delete('{user}', 'destroy')->name('users.destroy');
-	});
+	Route::resource('users', UserController::class)->except([
+		'create', 'store'
+	]);
 
 	Route::view('/posts/create', 'posts.create-post')->name('posts.create');
+	Route::resource('posts', PostController::class)->except([
+		'create', 'index', 'show'
+	]);
 
-	Route::controller(PostController::class)->group(function () {
-		Route::get('/posts/{post}/edit', 'edit')->name('posts.edit');
-		Route::post('/posts', 'store')->name('posts.store');
-		Route::patch('/posts/{post}', 'update')->name('posts.update');
-		Route::delete('/posts/{post}', 'destroy')->name('posts.destroy');
-	});
+	Route::resource('posts.comments', CommentController::class)->except([
+		'index', 'show'
+	]);
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
