@@ -29,7 +29,7 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
 				@auth
-					<a href="{{ route('posts.create') }}" class="py-2 px-6 lg:px-4 xl:px-6 inline-flex items-center justify-center text-center text-white text-base text-lg hover:bg-opacity-90 font-normal rounded-full bg-lime-500 mr-3">
+					<a href="{{ route('posts.create') }}" class="py-2 px-6 lg:px-4 xl:px-6 inline-flex items-center justify-center text-center text-white text-lg hover:bg-opacity-90 font-normal rounded-full bg-lime-500 mr-3">
 						{{ __('Create new post') }}
 					</a>
 
