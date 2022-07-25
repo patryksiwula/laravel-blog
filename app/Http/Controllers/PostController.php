@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Contracts\View\View;
@@ -52,7 +53,13 @@ class PostController extends Controller
      */
     public function show(Post $post): View
     {
-        return view('posts.single-post', ['post' => $post]);
+		$comments = Comment::with('user')
+			->where('post_id', $post->id)->get();
+
+        return view('posts.single-post', [
+			'post' => $post,
+			'comments' => $comments
+		]);
     }
 
     /**
