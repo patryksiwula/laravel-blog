@@ -61,36 +61,29 @@
 						@endif
 					</div>
 
-					<div class="w-full mt-10">
-						<h1>Comments</h1>
+					@if (!empty($comments))
+						<div class="w-full mt-10">
+							<h1>{{ _('Comments') }}</h1>
 
-						<div class="w-full flex mt-5">
-							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
-								float-left h-10">
-
-							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
-							</div>
+							@foreach ($comments as $comment)
+								<div class="w-full flex mt-5">
+									<a href="{{ route('users.show', ['user' => $comment->user]) }}">
+										@if ($comment->user->thumbnail_xs_path == 'https://via.placeholder.com/40x40.png/CCCCCC?text=User')
+											<img src="{{ $comment->user->thumbnail_xs_path }}" alt="{{ $comment->user->name }}" class="rounded-full 
+											float-left h-10">
+										@else
+											<img src="{{ asset('storage/uploads/profiles/thumbnails_xs/' . $comment->user->thumbnail_xs_path) }}" alt="" class="rounded-full 
+											float-left h-10">
+										@endif
+									</a>
+		
+									<div class="w-full ml-3 bg-gray-200 p-3 rounded-lg">
+										{!! $comment->content !!}
+									</div>
+								</div>
+							@endforeach
 						</div>
-
-						<div class="w-full flex mt-5">
-							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
-								float-left h-10">
-
-							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
-							</div>
-						</div>
-
-						<div class="w-full flex mt-5">
-							<img src="http://localhost:8000/storage/uploads/profiles/thumbnails_xs/thumbnail_xs_21_07_2022_19_11test_imagexd.png" alt="" class="rounded-full 
-								float-left h-10">
-
-							<div class="ml-3 bg-gray-200 p-3 rounded-lg">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce iaculis tortor quis felis luctus iaculis. Nulla nec erat id enim pharetra congue. Nullam laoreet augue quis sodales tristique. Phasellus vel tortor quis ligula iaculis facilisis ut dapibus sapien. Etiam eget orci semper, efficitur ipsum eget, eleifend mi. Proin nec tincidunt mauris, nec volutpat ligula. Vivamus sed ornare mauris.
-							</div>
-						</div>
-					</div>
+					@endif
 				</div>
 			</div>
 		</div>
