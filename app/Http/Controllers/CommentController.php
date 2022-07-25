@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateComment;
-use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\CommentRequest;
 use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Contracts\View\View;
@@ -14,13 +14,15 @@ class CommentController extends Controller
 {	
 	public function edit(Post $post, Comment $comment): View
 	{
+		$this->authorize('update', $comment);
+
 		return view('posts.comments.edit', [
 			'post' => $post,
 			'comment' => $comment
 		]);
 	}
 
-    public function store(StoreCommentRequest $request, Post $post, CreateComment $createComment): RedirectResponse
+    public function store(CommentRequest $request, Post $post, CreateComment $createComment): RedirectResponse
 	{
 		$createComment->handle(
 			auth()->id(),
@@ -33,13 +35,26 @@ class CommentController extends Controller
 		])->withMessage('action', 'comment_created');
 	}
 
-	public function update(Request $request, Post $post, Comment $comment): void
+	public function update(CommentRequest $request, Post $post, Comment $comment): RedirectResponse
 	{
-		# code...
+		$this->authorize('update', $comment);
+
+		$comment->content = $request->input('comment_content');
+		$comment->save();
+
+		return redirect()->route('posts.show', [
+			'post' => $post
+		])->withMessage('action', 'comment_updated');
 	}
 
-	public function destroy(Post $post, Comment $comment): void
+	public function destroy(Post $post, Comment $comment): RedirectResponse
 	{
-		# code...
+		$this->authorize('delete', $post, $comment);
+
+		$comment->delete();
+
+		return redirect()->route('posts.show', [
+			'post' => $post
+		])->withMessage('action', 'comment_deleted');
 	}
 }
