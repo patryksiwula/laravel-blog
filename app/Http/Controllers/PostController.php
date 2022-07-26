@@ -53,7 +53,7 @@ class PostController extends Controller
      */
     public function show(Post $post): View
     {
-		$comments = Comment::with('user')
+		$comments = Comment::with(['user', 'post'])
 			->where('post_id', $post->id)->get();
 
         return view('posts.single-post', [
