@@ -10,9 +10,6 @@
                     </x-nav-link>
 
 					@auth
-						<x-nav-link :href="route('dashboard')" :active="request()->is('dashboard')">
-							{{ __('Dashboard') }}
-						</x-nav-link>
 						<x-nav-link :href="route('users.show', ['user' => Auth::user()])" :active="request()->is('users/*')">
 							{{ __('Profile') }}
 						</x-nav-link>
@@ -87,12 +84,6 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-			@auth
-				<x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-					{{ __('Dashboard') }}
-				</x-responsive-nav-link>
-			@endauth
-
 			<x-responsive-nav-link :href="route('posts.index')" :active="request()->routeIs('posts*')">
 				{{ __('Posts') }}
 			</x-responsive-nav-link>

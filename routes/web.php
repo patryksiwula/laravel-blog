@@ -20,10 +20,6 @@ Route::redirect('/', '/posts')->name('home');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
 Route::middleware('auth')->group(function () {
-	Route::get('/dashboard', function () {
-		return view('dashboard');
-	})->name('dashboard');
-
 	Route::resource('users', UserController::class)->except([
 		'create', 'store'
 	]);
