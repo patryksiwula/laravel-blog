@@ -85,6 +85,10 @@
 				
 											<div class="w-full ml-3 bg-gray-200 p-3 rounded-lg">
 												{!! $comment->content !!}
+
+												<div class="text-right text-sm">
+													{{ $comment->created_at->format('d.m.Y, h:i') }}
+												</div>
 											</div>
 										</div>
 									</div>
