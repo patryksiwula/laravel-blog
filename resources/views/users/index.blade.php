@@ -59,17 +59,7 @@
 												</p>
 											</td>
 											<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-												<p class="text-gray-900 whitespace-no-wrap">
-													<label class="flex items-center space-x-3 mb-3">
-														@if ($user->is_admin)
-															<input checked type="checkbox" name="checked-demo" class="form-tick appearance-none bg-white bg-check h-6 w-6
-																border border-gray-300 rounded-md checked:bg-gray-500 checked:border-transparent focus:outline-none"/>
-														@else
-															<input type="checkbox" name="checked-demo" class="form-tick appearance-none bg-white bg-check h-6 w-6
-																border border-gray-300 rounded-md checked:bg-gray-500 checked:border-transparent focus:outline-none"/>
-														@endif
-													</label>
-												</p>
+												<livewire:set-admin :user="$user" />
 											</td>
 										</tr>
 									@endforeach
