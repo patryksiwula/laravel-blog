@@ -48,7 +48,7 @@
 											active:border-primary transition disabled:bg-[#F5F7FD] disabled:cursor-default">
 									</div>
 			
-									<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-base text-xl bg-lime-500
+									<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-xl bg-lime-500
 										hover:bg-opacity-90 font-normal rounded-md hover:cursor-pointer">
 								</form>
 
