@@ -58,12 +58,20 @@
 			@endif
 		</div>
 
-		@if (!empty($comments))
-			<div class="w-full mt-10">
-				<h1>{{ _('Comments') }}</h1>
-
-				@include('posts.comments.comment', ['post' => $post, 'comments' => $comments])
+		<div class="w-full mt-10">
+			<div class="flex items-center">
+				<h1 class="">{{ _('Comments') }}</h1> 
+				@auth
+					<a href="{{ route('posts.comments.create', ['post' => $post]) }}" class="ml-3 py-2 px-4 items-center justify-center text-center text-white
+						text-lg bg-lime-500 hover:bg-opacity-90 font-normal rounded-md">
+						{{ __('Add comment') }}
+					</a>
+				@endauth
 			</div>
-		@endif
+
+			@if (!empty($comments))
+				@include('posts.comments.comment', ['post' => $post, 'comments' => $comments])
+			@endif
+		</div>
 	</div>
 @endsection

@@ -33,6 +33,13 @@
 			</div>
 			
 			<div class="mt-1 mb-5 float-right">
+				@auth
+					<a href="{{ route('posts.replies.create', ['post' => $post, 'comment' => $comment]) }}" class="py-1 px-4 inline-flex
+						items-center justify-center text-center text-white text-sm bg-blue-500 hover:bg-opacity-90 font-normal rounded-md">
+						{{ __('Reply') }}
+					</a>
+				@endauth
+
 				@can('update', $comment)
 					<a href="{{ route('posts.comments.edit', ['post' => $post, 'comment' => $comment]) }}" class="py-1 px-4 inline-flex
 						items-center justify-center text-center text-white text-sm bg-lime-500 hover:bg-opacity-90 font-normal rounded-md">

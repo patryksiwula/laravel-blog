@@ -658,6 +658,12 @@ h3{
 .-mt-px{
   margin-top: -1px;
 }
+.ml-10{
+  margin-left: 2.5rem;
+}
+.ml-5{
+  margin-left: 1.25rem;
+}
 .block{
   display: block;
 }
@@ -946,6 +952,10 @@ h3{
 .bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+.bg-blue-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 .fill-current{
   fill: currentColor;
