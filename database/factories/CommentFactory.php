@@ -20,7 +20,7 @@ class CommentFactory extends Factory
     {
         return [
             'user_id' => User::all('id')->random(),
-			'post_id' => Post::all('id')->random(),
+			'commentable_id' => Post::all('id')->random(),
 			'content' => $this->faker->paragraphs(1, true)
         ];
     }
