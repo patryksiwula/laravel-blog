@@ -20,7 +20,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->is_admin || auth()->id() == $comment->user->id;
+        return $user->is_admin || $user->id == $comment->user->id;
     }
 
     /**
@@ -34,7 +34,7 @@ class CommentPolicy
     public function delete(User $user, Post $post, Comment $comment)
     {
         return $user->is_admin
-			|| $comment->user->id == $post->user->id
-			|| auth()->id() == $comment->user->id;
+			|| ($comment->user->id == $post->user->id)
+			|| ($user->id == $comment->user->id);
     }
 }
