@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Post extends Model
 {
@@ -49,8 +50,8 @@ class Post extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function comments(): HasMany
+	public function comments(): MorphMany
 	{
-		return $this->hasMany(Comment::class);
+		return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
 	}
 }
