@@ -24,7 +24,8 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'comment_content' => 'required'
+            'comment_content' => 'required',
+			'comment' => 'numeric|nullable'
         ];
     }
 }
