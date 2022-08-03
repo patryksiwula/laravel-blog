@@ -62,7 +62,7 @@
 			<div class="w-full mt-10">
 				<h1>{{ _('Comments') }}</h1>
 
-				@each('posts.comments.comment', $comments, 'comment')
+				@include('posts.comments.comment', ['post' => $post, 'comments' => $comments])
 			</div>
 		@endif
 	</div>
