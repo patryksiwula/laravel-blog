@@ -16,10 +16,16 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
 			$table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-			$table->foreignId('post_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+			$table->unsignedBigInteger('commentable_id');
+			$table->string('commentable_type');
+			$table->unsignedBigInteger('parent_id')->nullable();
 			$table->text('content');
             $table->timestamps();
         });
+
+		Schema::table('comments', function (Blueprint $table) {
+			$table->foreign('parent_id')->references('id')->on('comments')->cascadeOnUpdate()->cascadeOnDelete();
+		});
     }
 
     /**
