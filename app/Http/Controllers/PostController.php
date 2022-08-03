@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Models\Comment;
 use App\Models\Post;
+use App\Services\CommentService;
 use App\Services\PostService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -51,11 +51,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(Post $post): View
+    public function show(Post $post, CommentService $commentService): View
     {
-		$comments = Comment::with(['user', 'post', 'parent.user'])
-			->where('post_id', $post->id)
-			->get();
+		$comments = $commentService->generateCommentTree($post->id);
 
         return view('posts.single-post', [
 			'post' => $post,
