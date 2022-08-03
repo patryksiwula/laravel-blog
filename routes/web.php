@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 	Route::resource('posts.comments', CommentController::class)->except([
 		'create', 'index', 'show'
 	]);
+
+	Route::view('/posts/{post}/comments/{comment}/replies/create', 'posts.comments.create')->name('posts.replies.create');
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
