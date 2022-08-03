@@ -34,14 +34,14 @@
 			
 			<div class="mt-1 mb-5 float-right">
 				@can('update', $comment)
-					<a href="{{ route('posts.comments.edit', ['post' => $comment->post, 'comment' => $comment]) }}" class="py-1 px-4 inline-flex
+					<a href="{{ route('posts.comments.edit', ['post' => $post, 'comment' => $comment]) }}" class="py-1 px-4 inline-flex
 						items-center justify-center text-center text-white text-sm bg-lime-500 hover:bg-opacity-90 font-normal rounded-md">
 						{{ __('Edit') }}
 					</a>
 				@endcan
 
-				@can('delete', $comment->post)
-					<form method="POST" action="{{ route('posts.comments.destroy', ['post' => $comment->post, 'comment' => $comment]) }}" class="inline-flex
+				@can('delete', $post, $comment)
+					<form method="POST" action="{{ route('posts.comments.destroy', ['post' => $post, 'comment' => $comment]) }}" class="inline-flex
 						items-center justify-center">
 						@csrf
 						@method('DELETE')
@@ -53,7 +53,7 @@
 			</div>
 
 			@if (!empty($comment->replies))
-				@include('posts.comments.comment', ['post' => $comment->post, 'comments' => $comment->replies])
+				@include('posts.comments.comment', ['post' => $post, 'comments' => $comment->replies])
 			@endif
 		</div>
 @endforeach
