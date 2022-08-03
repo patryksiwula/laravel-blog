@@ -8,7 +8,6 @@ use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {	
@@ -27,7 +26,8 @@ class CommentController extends Controller
 		$createComment->handle(
 			auth()->id(),
 			$post->id,
-			$request->input('comment_content')
+			$request->input('comment_content'),
+			$request->input('comment')
 		);
 
 		return redirect()->route('posts.show', [
