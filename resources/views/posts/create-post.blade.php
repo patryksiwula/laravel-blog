@@ -25,6 +25,20 @@
 				<textarea class="tinymce" id="post-content" name="post_content"></textarea>
 			</div>
 
+			<div class="mt-8 w-full">
+				<label for="post_category" class="font-bold text-base text-black block mb-3">
+					{{ __('Category') }}
+				</label>
+				<select name="post_category" id="post-category" class=" w-full border-[1.5px] border-form-stroke rounded-lg py-3 px-5 font-medium
+					text-body-color outline-none focus:border-primary active:border-primary transition disabled:bg-[#F5F7FD] disabled:cursor-default
+					appearance-none">
+
+					@foreach ($categories as $category)
+						<option value="{{ $category->id }}">{{ $category->name }}</option>
+					@endforeach
+				</select>
+			</div>
+
 			<div class="w-full mt-8">
 				<label for="post_image" class="font-bold text-base text-black block mb-3">
 					{{ __('Post image') }}
