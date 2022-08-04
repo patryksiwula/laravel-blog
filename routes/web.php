@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -34,7 +35,11 @@ Route::middleware('auth')->group(function () {
 	]);
 
 	Route::view('/posts/{post}/comments/{comment}/replies/create', 'posts.comments.create')->name('posts.replies.create');
+
+	Route::resource('categories', CategoryController::class)->except(['show']);
 });
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
 require __DIR__.'/auth.php';
