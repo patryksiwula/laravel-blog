@@ -9,25 +9,23 @@ class CommentService
 {
 	public function generateCommentTree(int $post): Collection
 	{
-		$comments = Comment::with(['user', 'parent'])->where('commentable_id', $post)->get();
-		$commentsTree = new Collection();
+		$commentTree = Comment::with(['user', 'parent'])->where('commentable_id', $post)->get();
+		$commentsById = new Collection();
 
-		foreach ($comments as $comment)
-			$commentsTree->put($comment->id, $comment);
+		foreach ($commentTree as $comment)
+			$commentsById->put($comment->id, $comment);
 
-		foreach ($comments as $key => $comment)
+		foreach ($commentTree as $key => $comment)
 		{
-			$commentsTree->get($comment->id)->replies = new Collection();
+			$commentsById->get($comment->id)->replies = new Collection();
 			
 			if ($comment->parent != null)
 			{
-				$commentsTree->get($comment->parent->id)->replies->push($comment);
-				unset($comments[$key]);
+				$commentsById->get($comment->parent->id)->replies->push($comment);
+				unset($commentTree[$key]);
 			}
 		}
-		
-		//dd($commentsTree);
 
-		return $comments;
+		return $commentTree;
 	}
 }
