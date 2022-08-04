@@ -24,9 +24,8 @@ Route::middleware('auth')->group(function () {
 		'create', 'store'
 	]);
 
-	Route::view('/posts/create', 'posts.create-post')->name('posts.create');
 	Route::resource('posts', PostController::class)->except([
-		'create', 'index', 'show'
+		'index', 'show'
 	]);
 
 	Route::view('/posts/{post}/comments/create', 'posts.comments.create')->name('posts.comments.create');
