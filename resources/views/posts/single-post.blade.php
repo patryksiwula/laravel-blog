@@ -68,7 +68,7 @@
 					</a>
 				@endauth
 			</div>
-
+			
 			@if (!empty($comments))
 				@include('posts.comments.comment', ['post' => $post, 'comments' => $comments])
 			@endif

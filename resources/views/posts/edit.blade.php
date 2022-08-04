@@ -38,7 +38,7 @@
 					file:cursor-pointer file:hover:bg-primary file:hover:bg-opacity-10">
 			</div>
 
-			<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-base text-xl bg-lime-500
+			<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-xl bg-lime-500
 				hover:bg-opacity-90 font-normal rounded-md hover:cursor-pointer">							
 		</form>
 	</div>
