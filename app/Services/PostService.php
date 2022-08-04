@@ -5,6 +5,7 @@ namespace App\Services;
 use \App\Actions\GenerateThumbnail;
 use \App\Models\Post;
 use \Illuminate\Http\UploadedFile;
+use \Illuminate\Support\Str;
 
 class PostService
 {			
@@ -21,9 +22,10 @@ class PostService
 	 * @param  string $title
 	 * @param  string $content
 	 * @param  \Illuminate\Http\UploadedFile $file
+	 * @param  int $user
 	 * @return Post
 	 */
-	public function createPost(string $title, string $content, UploadedFile $file): Post
+	public function createPost(string $title, string $content, UploadedFile $file, int $user): Post
 	{
 		// Upload image
 		$image = $file;
@@ -36,13 +38,14 @@ class PostService
 		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
 		$this->generateThumbnail->handle($thumbnailPath, 368, 240);
 
-		$post = new Post();
-		$post->title = $title;
-		$post->content = $content;
-		$post->image_path = $fileName;
-		$post->thumbnail_path = $thumbnail;
-		$post->user_id = auth()->id();
-		$post->save();
+		$post = Post::create([
+			'title' => $title,
+			'slug' => Str::slug($title),
+			'content' => $content,
+			'image_path' => $fileName,
+			'thumbnail_path' => $thumbnail,
+			'user_id' => $user
+		]);
 
 		return $post;
 	}
@@ -55,7 +58,7 @@ class PostService
 	 * @param  \Illuminate\Http\UploadedFile|null $file
 	 * @return void
 	 */
-	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file): void
+	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, int $updatedBy): void
 	{
 		$post = Post::find($id);
 
@@ -82,7 +85,7 @@ class PostService
 			$post->thumbnail_path = $thumbnail;
 		}
 
-		$post->updated_by = auth()->id();
+		$post->updated_by = $updatedBy;
 		$post->save();
 	}
 }
