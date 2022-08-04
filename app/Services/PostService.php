@@ -22,10 +22,11 @@ class PostService
 	 * @param  string $title
 	 * @param  string $content
 	 * @param  \Illuminate\Http\UploadedFile $file
+	 * @param  int $category
 	 * @param  int $user
 	 * @return Post
 	 */
-	public function createPost(string $title, string $content, UploadedFile $file, int $user): Post
+	public function createPost(string $title, string $content, UploadedFile $file, int $category, int $user): Post
 	{
 		// Upload image
 		$image = $file;
@@ -44,7 +45,8 @@ class PostService
 			'content' => $content,
 			'image_path' => $fileName,
 			'thumbnail_path' => $thumbnail,
-			'user_id' => $user
+			'user_id' => $user,
+			'category_id' => $category
 		]);
 
 		return $post;
@@ -56,9 +58,10 @@ class PostService
 	 * @param  string $title
 	 * @param  string $content
 	 * @param  \Illuminate\Http\UploadedFile|null $file
+	 * @param  int $category
 	 * @return void
 	 */
-	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, int $updatedBy): void
+	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, int $category, int $updatedBy): void
 	{
 		$post = Post::find($id);
 
@@ -84,6 +87,9 @@ class PostService
 			$post->image_path = $fileName;
 			$post->thumbnail_path = $thumbnail;
 		}
+
+		if ($post->category_id !== $category)
+			$post->category_id = $category;
 
 		$post->updated_by = $updatedBy;
 		$post->save();
