@@ -37,7 +37,8 @@ class PostController extends Controller
         $post = $postService->createPost(
 			$request->input('post_title'),
 			$request->input('post_content'),
-			$request->file('post_image')
+			$request->file('post_image'),
+			auth()->id()
 		);
 
 		return redirect()
@@ -89,7 +90,8 @@ class PostController extends Controller
 			$post->id, 
 			$request->input('post_title'), 
 			$request->input('post_content'), 
-			$request->file('post_image')
+			$request->file('post_image'),
+			auth()->id()
 		);
 
 		return redirect()
