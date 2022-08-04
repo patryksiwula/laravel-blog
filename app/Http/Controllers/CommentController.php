@@ -11,6 +11,13 @@ use Illuminate\Http\RedirectResponse;
 
 class CommentController extends Controller
 {	
+	public function create(Post $post): View
+	{
+		return view('posts.comments.create', [
+			'post' => $post
+		]);
+	}
+
 	public function edit(Post $post, Comment $comment): View
 	{
 		$this->authorize('update', $comment);
