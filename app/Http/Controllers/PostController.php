@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
@@ -18,11 +19,19 @@ class PostController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-		$posts = Post::with('user')->paginate(9);
+		$posts = [];
+		
+		if (isset($request->categories))
+			$posts = Post::with('user')->where('category_id', $request->categories)->paginate(9);
+		else
+			$posts = Post::with('user')->paginate(9);
+
+		$categories = Category::all();
 
         return view('posts.posts', [
+			'categories' => $categories,
 			'posts' => $posts
 		]);
     }
