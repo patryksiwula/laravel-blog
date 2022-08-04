@@ -26,6 +26,11 @@ class Post extends Model
 		'user_id',
 		'category_id'
     ];
+
+	public function getRouteKeyName()
+	{
+		return 'slug';
+	}
 	
 	/**
 	 * Get the user which the post belongs to
