@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Category;
 use App\Models\Post;
 use App\Services\CommentService;
 use App\Services\PostService;
@@ -25,6 +26,20 @@ class PostController extends Controller
 			'posts' => $posts
 		]);
     }
+	
+	/**
+	 * Show the form for creating a resource.
+	 *
+	 * @return View
+	 */
+	public function create(): View
+	{
+		$categories = Category::all();
+
+		return view('posts.create-post', [
+			'categories' => $categories
+		]);
+	}
    
     /**
      * Store a newly created resource in storage.
@@ -38,6 +53,7 @@ class PostController extends Controller
 			$request->input('post_title'),
 			$request->input('post_content'),
 			$request->file('post_image'),
+			$request->input('post_category'),
 			auth()->id()
 		);
 
@@ -71,8 +87,12 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
 		$this->authorize('update', $post);
+		$categories = Category::all();
 
-        return view('posts.edit', ['post' => $post]);
+        return view('posts.edit', [
+			'post' => $post,
+			'categories' => $categories
+		]);
     }
 
     /**
@@ -91,6 +111,7 @@ class PostController extends Controller
 			$request->input('post_title'), 
 			$request->input('post_content'), 
 			$request->file('post_image'),
+			$request->input('post_category'),
 			auth()->id()
 		);
 
