@@ -33,8 +33,8 @@ class SetAdmin extends Component
 	 */
 	public function setAdmin(int $admin): void
 	{
-		$this->authorize('update', $this->user);
-		
+		$this->authorize('delete', $this->user);
+
 		// Only edit the role for other users
 		if ($this->user->id != auth()->id())
 			$this->user->update(['is_admin' => $admin]);
