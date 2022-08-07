@@ -22,7 +22,7 @@ class PostFactory extends Factory
 		$title = $this->faker->sentence();
 
         return [
-            'title' => $this->faker->sentence(),
+            'title' => $title,
 			'slug' => Str::slug($title),
 			'content' => $this->faker->paragraphs(20, true),
 			'image_path' => $this->faker->imageUrl(860, 300, null, false, 'Post', true),
