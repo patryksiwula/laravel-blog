@@ -28,23 +28,14 @@ class PostService
 	 */
 	public function createPost(string $title, string $content, UploadedFile $file, int $category, int $user): Post
 	{
-		// Upload image
-		$image = $file;
-		$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
-		$thumbnail = 'thumbnail_' . $fileName;
-		$image->storeAs('public/uploads', $fileName);
-		$image->storeAs('public/uploads/thumbnails', $thumbnail);
-		
-		// Generate thumbnail
-		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-		$this->generateThumbnail->handle($thumbnailPath, 368, 240);
+		$image = $this->uploadFile($file);
 
 		$post = Post::create([
 			'title' => $title,
 			'slug' => Str::slug($title),
 			'content' => $content,
-			'image_path' => $fileName,
-			'thumbnail_path' => $thumbnail,
+			'image_path' => $image['fileName'],
+			'thumbnail_path' => $image['thumbnail'],
 			'user_id' => $user,
 			'category_id' => $category
 		]);
@@ -74,18 +65,9 @@ class PostService
 
 		if ($file)
 		{
-			$image = $file;
-			$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
-			$thumbnail = 'thumbnail_' . $fileName;
-			$image->storeAs('public/uploads', $fileName);
-			$image->storeAs('public/uploads/thumbnails', $thumbnail);
-			
-			// Generate thumbnail
-			$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-			$this->generateThumbnail->handle($thumbnailPath, 368, 240);
-
-			$post->image_path = $fileName;
-			$post->thumbnail_path = $thumbnail;
+			$image = $this->uploadFile($file);
+			$post->image_path = $image['fileName'];
+			$post->thumbnail_path = $image['thumbnail'];
 		}
 
 		if ($post->category_id !== $category)
@@ -93,5 +75,24 @@ class PostService
 
 		$post->updated_by = $updatedBy;
 		$post->save();
+	}
+
+	public function uploadFile(UploadedFile $file): array
+	{
+		// Upload image
+		$image = $file;
+		$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
+		$thumbnail = 'thumbnail_' . $fileName;
+		$image->storeAs('public/uploads', $fileName);
+		$image->storeAs('public/uploads/thumbnails', $thumbnail);
+		
+		// Generate thumbnail
+		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
+		$this->generateThumbnail->handle($thumbnailPath, 368, 240);
+
+		return [
+			'fileName' => $fileName,
+			'thumbnail' => $thumbnail
+		];
 	}
 }
