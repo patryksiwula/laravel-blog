@@ -22,9 +22,12 @@
 							<th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
 								{{ __('E-Mail') }}
 							</th>
-							<th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
-								{{ __('Admin') }}
-							</th>
+
+							@if (Auth::user()->is_admin)
+								<th scope="col" class="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">
+									{{ __('Admin') }}
+								</th>
+							@endif
 						</tr>
 					</thead>
 					<tbody>
@@ -62,9 +65,12 @@
 										{{ $user->email }}
 									</p>
 								</td>
-								<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-									<livewire:set-admin :user="$user" />
-								</td>
+
+								@can('delete', $user)
+									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+										<livewire:set-admin :user="$user" />
+									</td>
+								@endcan
 							</tr>
 						@endforeach
 					</tbody>
