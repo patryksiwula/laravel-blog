@@ -61,4 +61,14 @@ class Post extends Model
 	{
 		return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
 	}
+	
+	/**
+	 * Get the category which the post belongs to
+	 *
+	 * @return BelongsTo
+	 */
+	public function category(): BelongsTo
+	{
+		return $this->belongsTo(Category::class);
+	}
 }
