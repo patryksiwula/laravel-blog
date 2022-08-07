@@ -15,11 +15,14 @@ class UserService
 	 */
 	public function __construct(private GenerateThumbnail $generateThumbnail) { }
 
-	public function updateUser(int $id, string $name, ?string $website, ?string $github, ?UploadedFile $file): void
+	public function updateUser(int $id, ?string $name, ?string $website, ?string $github, ?UploadedFile $file): void
 	{
+		// Only update the fields in the database if they have been changed
+		if ($name === NULL && $website === NULL && $github === NULL && $file === NULL)
+			return;
+			
 		$user = User::find($id);
 
-		// Only update the fields in the database if they have been changed
 		if ($user->name !== $name)
 			$user->name = $name;
 		
