@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
 		'image_path',
 		'thumbnail_sm_path',
-		'thumbnail_xs_path'
+		'thumbnail_xs_path',
+		'is_admin'
     ];
 
     /**
