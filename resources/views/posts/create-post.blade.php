@@ -29,7 +29,7 @@
 				<label for="post_category" class="font-bold text-base text-black block mb-3">
 					{{ __('Category') }}
 				</label>
-				<select name="post_category" id="post-category" class=" w-full border-[1.5px] border-form-stroke rounded-lg py-3 px-5 font-medium
+				<select name="post_category" id="post-category" class="w-full border-[1.5px] border-form-stroke rounded-lg py-3 px-5 font-medium
 					text-body-color outline-none focus:border-primary active:border-primary transition disabled:bg-[#F5F7FD] disabled:cursor-default
 					appearance-none">
 
@@ -49,7 +49,7 @@
 					file:cursor-pointer file:hover:bg-primary file:hover:bg-opacity-10">
 			</div>
 
-			<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-base text-xl bg-lime-500
+			<input type="submit" class="mt-8 py-4 px-10 lg:px-8 xl:px-10 inline-flex items-center justify-center text-center text-white text-xl bg-lime-500
 				hover:bg-opacity-90 font-normal rounded-md hover:cursor-pointer">							
 		</form>
 	</div>
