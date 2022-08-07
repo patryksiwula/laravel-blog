@@ -4,10 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class SetAdmin extends Component
 {
+	use AuthorizesRequests;
+
 	public User $user;
 	    
     /**
@@ -30,11 +33,10 @@ class SetAdmin extends Component
 	 */
 	public function setAdmin(int $admin): void
 	{
+		$this->authorize('update', $this->user);
+		
 		// Only edit the role for other users
 		if ($this->user->id != auth()->id())
-		{
-			$this->user->is_admin = $admin;
-			$this->user->save();
-		}
+			$this->user->update(['is_admin' => $admin]);
 	}
 }
