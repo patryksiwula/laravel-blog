@@ -14,11 +14,9 @@
 							{{ __('Profile') }}
 						</x-nav-link>
 
-						@can('viewAny', Auth::user())
-							<x-nav-link :href="route('users.index')" :active="request()->is('users')">
-								{{ __('Users') }}
-							</x-nav-link>
-						@endcan
+						<x-nav-link :href="route('users.index')" :active="request()->is('users')">
+							{{ __('Users') }}
+						</x-nav-link>
 					@endauth
 
 					<x-nav-link :href="route('categories.index')" :active="request()->is('categories*')">
