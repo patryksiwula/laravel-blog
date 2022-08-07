@@ -20,6 +20,10 @@
 							</x-nav-link>
 						@endcan
 					@endauth
+
+					<x-nav-link :href="route('categories.index')" :active="request()->is('categories*')">
+                        {{ __('Categories') }}
+                    </x-nav-link>
                 </div>
             </div>
 
