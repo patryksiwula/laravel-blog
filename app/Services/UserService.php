@@ -29,30 +29,39 @@ class UserService
 		if ($user->website !== $website)
 			$user->website = $website;
 
-			if ($user->github !== $github)
-				$user->github = $github;
+		if ($user->github !== $github)
+			$user->github = $github;
 
 		if ($file)
 		{
-			$image = $file;
-			$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
-			$thumbnailSm = 'thumbnail_sm_' . $fileName;
-			$thumbnailXs = 'thumbnail_xs_' . $fileName;
-			$image->storeAs('public/uploads/profiles', $fileName);
-			$image->storeAs('public/uploads/profiles/thumbnails_sm', $thumbnailSm);
-			$image->storeAs('public/uploads/profiles/thumbnails_xs', $thumbnailXs);
-			
-			// Generate thumbnails
-			$thumbnailPathSm = public_path('storage/uploads/profiles/thumbnails_sm/' . $thumbnailSm);
-			$thumbnailPathXs = public_path('storage/uploads/profiles/thumbnails_xs/' . $thumbnailXs);
-			$this->generateThumbnail->handle($thumbnailPathSm, 100, 100);
-			$this->generateThumbnail->handle($thumbnailPathXs, 40, 40);
-
-			$user->image_path = $fileName;
-			$user->thumbnail_sm_path = $thumbnailSm;
-			$user->thumbnail_xs_path = $thumbnailXs;
+			$upload = $this->uploadImage($file);
+			$user->image_path = $upload['fileName'];
+			$user->thumbnail_sm_path = $upload['$thumbnailSm'];
+			$user->thumbnail_xs_path = $upload['thumbnailXs'];
 		}
 
 		$user->save();
+	}
+
+	private function uploadImage(UploadedFile $file): array
+	{
+		$fileName = date('d_m_Y_H_i') . $file->getClientOriginalName();
+		$thumbnailSm = 'thumbnail_sm_' . $fileName;
+		$thumbnailXs = 'thumbnail_xs_' . $fileName;
+		$file->storeAs('public/uploads/profiles', $fileName);
+		$file->storeAs('public/uploads/profiles/thumbnails_sm', $thumbnailSm);
+		$file->storeAs('public/uploads/profiles/thumbnails_xs', $thumbnailXs);
+		
+		// Generate thumbnails
+		$thumbnailPathSm = public_path('storage/uploads/profiles/thumbnails_sm/' . $thumbnailSm);
+		$thumbnailPathXs = public_path('storage/uploads/profiles/thumbnails_xs/' . $thumbnailXs);
+		$this->generateThumbnail->handle($thumbnailPathSm, 100, 100);
+		$this->generateThumbnail->handle($thumbnailPathXs, 40, 40);
+
+		return [
+			'fileName' => $fileName,
+			'thumbnailSm' => $thumbnailSm,
+			'thumbnailXs' => $thumbnailXs
+		];
 	}
 }
