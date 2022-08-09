@@ -28,14 +28,14 @@ class PostService
 	 */
 	public function createPost(string $title, string $content, UploadedFile $file, int $category, int $user): Post
 	{
-		$image = $this->uploadFile($file);
+		$upload = $this->uploadImage($file, 368, 240);
 
 		$post = Post::create([
 			'title' => $title,
 			'slug' => Str::slug($title),
 			'content' => $content,
-			'image_path' => $image['fileName'],
-			'thumbnail_path' => $image['thumbnail'],
+			'image_path' => $upload['fileName'],
+			'thumbnail_path' => $upload['thumbnail'],
 			'user_id' => $user,
 			'category_id' => $category
 		]);
@@ -52,22 +52,25 @@ class PostService
 	 * @param  int $category
 	 * @return void
 	 */
-	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, int $category, int $updatedBy): void
+	public function updatePost(int $id, string $title, string $content, ?UploadedFile $file, int $category, int $updatedBy): Post
 	{
 		$post = Post::find($id);
 
 		// Only update the fields in the database if they have been changed
 		if ($post->title !== $title)
+		{
 			$post->title = $title;
+			$post->slug = Str::slug($title);
+		}
 		
 		if ($post->content !== $content)
 			$post->content = $content;
 
 		if ($file)
 		{
-			$image = $this->uploadFile($file);
-			$post->image_path = $image['fileName'];
-			$post->thumbnail_path = $image['thumbnail'];
+			$upload = $this->uploadImage($file, 368, 240);
+			$post->image_path = $upload['fileName'];
+			$post->thumbnail_path = $upload['thumbnail'];
 		}
 
 		if ($post->category_id !== $category)
@@ -75,20 +78,21 @@ class PostService
 
 		$post->updated_by = $updatedBy;
 		$post->save();
+
+		return $post;
 	}
 
-	public function uploadFile(UploadedFile $file): array
+	private function uploadImage(UploadedFile $file, int $thumbnaiWidth, int $thumbnailHeight): array
 	{
 		// Upload image
-		$image = $file;
-		$fileName = date('d_m_Y_H_i') . $image->getClientOriginalName();
-		$thumbnail = 'thumbnail_' . $fileName;
-		$image->storeAs('public/uploads', $fileName);
-		$image->storeAs('public/uploads/thumbnails', $thumbnail);
+		$fileName = date('d_m_Y_H_i') . $file->getClientOriginalName();
+		$thumbnail = 'thumbnail_sm_' . $fileName;
+		$file->storeAs('public/uploads', $fileName);
+		$file->storeAs('public/uploads/thumbnails', $thumbnail);
 		
 		// Generate thumbnail
 		$thumbnailPath = public_path('storage/uploads/thumbnails/' . $thumbnail);
-		$this->generateThumbnail->handle($thumbnailPath, 368, 240);
+		$this->generateThumbnail->handle($thumbnailPath, $thumbnaiWidth, $thumbnailHeight);
 
 		return [
 			'fileName' => $fileName,
