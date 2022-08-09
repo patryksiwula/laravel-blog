@@ -12,6 +12,11 @@ class SetAdmin extends Component
 	use AuthorizesRequests;
 
 	public User $user;
+
+	public function mount(User $user): void
+	{
+		$this->user = $user;
+	}
 	    
     /**
      * Render the component
