@@ -115,7 +115,7 @@ class PostController extends Controller
     {
 		$this->authorize('update', $post);
 
-		$postService->updatePost(
+		$post = $postService->updatePost(
 			$post->id, 
 			$request->input('post_title'), 
 			$request->input('post_content'), 
