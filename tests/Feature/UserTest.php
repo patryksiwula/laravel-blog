@@ -17,7 +17,11 @@ class UserTest extends TestCase
      */
     public function test_user_list_can_be_rendered(): void
     {
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create();
+
 		$this->actingAs($user);
         $response = $this->get('/users');
         $response->assertStatus(200);
@@ -31,6 +35,9 @@ class UserTest extends TestCase
 
 	public function test_normal_user_cannot_see_change_role_selects(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create([
 			'is_admin' => 0
 		]);
@@ -42,6 +49,9 @@ class UserTest extends TestCase
 
 	public function test_admin_can_see_change_role_selects(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create([
 			'is_admin' => 1
 		]);
@@ -53,7 +63,11 @@ class UserTest extends TestCase
 
 	public function test_user_profile_page_can_be_rendered(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create();
+
 		$this->actingAs($user);
         $response = $this->get('/users/' . $user->id);
         $response->assertStatus(200);
@@ -68,7 +82,11 @@ class UserTest extends TestCase
 
 	public function test_edit_form_can_be_rendered(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create();
+		
 		$this->actingAs($user);
 		$response = $this->get('/users/' . $user->id . '/edit');
 		$response->assertStatus(200);
@@ -76,6 +94,9 @@ class UserTest extends TestCase
 
 	public function test_normal_user_can_edit_self(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create([
 			'is_admin' => 0
 		]);
@@ -91,13 +112,23 @@ class UserTest extends TestCase
 
 	public function test_normal_user_cannot_edit_other_users(): void
 	{
-		$users = User::factory(2)->create([
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user1 = User::factory()->create([
 			'is_admin' => 0
 		]);
 
-		$this->actingAs($users->get(0));
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user2 = User::factory()->create([
+			'is_admin' => 0
+		]);
 
-		$response = $this->patch('/users/' . $users->get(1)->id, [
+		$this->actingAs($user1);
+
+		$response = $this->patch('/users/' . $user2->id, [
 			'name' => 'Test change name'
 		]);
 
@@ -106,10 +137,16 @@ class UserTest extends TestCase
 
 	public function test_admin_can_edit_users(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$admin = User::factory()->create([
 			'is_admin' => 1
 		]);
 
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create([
 			'is_admin' => 0
 		]);
@@ -125,21 +162,37 @@ class UserTest extends TestCase
 
 	public function test_normal_user_cannot_delete_users(): void
 	{
-		$users = User::factory(2)->create([
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user1 = User::factory()->create([
 			'is_admin' => 0
 		]);
 
-		$this->actingAs($users->get(0));
-		$response = $this->delete('/users/' . $users->get(1)->id);
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user2 = User::factory()->create([
+			'is_admin' => 0
+		]);
+
+		$this->actingAs($user1);
+		$response = $this->delete('/users/' . $user2->id);
 		$response->assertStatus(403);
 	}
 
 	public function test_admin_can_delete_users(): void
 	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$admin = User::factory()->create([
 			'is_admin' => 1
 		]);
 
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
 		$user = User::factory()->create([
 			'is_admin' => 0
 		]);
