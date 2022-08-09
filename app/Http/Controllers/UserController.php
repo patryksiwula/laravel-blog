@@ -68,7 +68,7 @@ class UserController extends Controller
 
 		return redirect()->route('users.show', [
 			'user' => $user
-		])->withMessage('message', 'profile_updated');
+		])->with('message', 'profile_updated');
 	}
 
 	/**
@@ -83,6 +83,6 @@ class UserController extends Controller
         $user->delete();
 
 		return redirect()->route('users.index')
-			->withMessage('message', 'user_deleted');
+			->with('message', 'user_deleted');
     }
 }
