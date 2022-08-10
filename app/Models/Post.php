@@ -55,7 +55,7 @@ class Post extends Model
 	/**
 	 * Get the comments to the post
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 * @return \Illuminate\Database\Eloquent\Relations\MorphMany
 	 */
 	public function comments(): MorphMany
 	{
