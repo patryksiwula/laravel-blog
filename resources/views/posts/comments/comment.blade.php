@@ -47,7 +47,7 @@
 					</a>
 				@endcan
 
-				@can('delete', $post, $comment)
+				@can('delete', $comment)
 					<form method="POST" action="{{ route('posts.comments.destroy', ['post' => $post, 'comment' => $comment]) }}" class="inline-flex
 						items-center justify-center">
 						@csrf

@@ -49,7 +49,7 @@ class CommentController extends Controller
 
 	public function destroy(Post $post, Comment $comment): RedirectResponse
 	{
-		$this->authorize('delete', $post, $comment);
+		$this->authorize('delete', $comment);
 
 		$comment->delete();
 

@@ -27,14 +27,13 @@ class CommentPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
 	 * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Post $post, Comment $comment)
+    public function delete(User $user, Comment $comment)
     {
         return $user->is_admin
 			|| $user->id == $comment->user_id
-			|| $user->id == $post->user_id;
+			|| $user->id == $comment->commentable->user_id;
     }
 }
