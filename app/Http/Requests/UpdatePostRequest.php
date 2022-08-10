@@ -25,7 +25,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'post_title' => 'min:6|max:255',
-			'post_image' => 'image|mimes:png,jpg,bmp,gif'
+			'post_image' => 'image|mimes:png,jpg,bmp,gif|nullable'
         ];
     }
 }
