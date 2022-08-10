@@ -7,6 +7,8 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -16,22 +18,22 @@ class PostTest extends TestCase
      *
      * @return void
      */
-    public function test_posts_can_be_rendered()
+    public function testPostsCanBeRendered()
     {
         $response = $this->get('/posts');
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
-	public function test_single_post_can_be_rendered(): void
+	public function testSinglePostCanBeRendered(): void
 	{
 		User::factory()->create();
 		Category::factory()->create();
 		$post = Post::factory()->create();
 		$response = $this->get('/posts/' . $post->slug);
-		$response->assertStatus(200);
+		$response->assertOk();
 	}
 
-	public function test_user_can_display_the_edit_form_of_his_post(): void
+	public function testUserCanDisplayTheEditFormOfHisPost(): void
 	{
 		/**
 		 * @var \Illuminate\Contracts\Auth\Authenticatable
@@ -46,10 +48,10 @@ class PostTest extends TestCase
 		]);
 
 		$response = $this->get('/posts/' . $post->slug . '/edit');
-		$response->assertStatus(200);
+		$response->assertOk();
 	}
 
-	public function test_user_cannot_display_the_edit_form_of_other_users_post(): void
+	public function testUserCannotDisplayTheEditFormOfOtherUsersPost(): void
 	{
 		/**
 		 * @var \Illuminate\Contracts\Auth\Authenticatable
@@ -69,10 +71,10 @@ class PostTest extends TestCase
 		]);
 
 		$response = $this->get('/posts/' . $post->slug . '/edit');
-		$response->assertStatus(403);
+		$response->assertForbidden();
 	}
 
-	public function test_user_can_edit_his_post(): void
+	public function testUserCanEditHisPost(): void
 	{
 		/**
 		 * @var \Illuminate\Contracts\Auth\Authenticatable
@@ -87,16 +89,16 @@ class PostTest extends TestCase
 		]);
 
 		$response = $this->patch('/posts/' . $post->slug, [
-			'post_title' => 'Test',
-			'post_content' => 'test',
-			'post_category' => 1,
-			'file' => null
+			'post_title' => 'Test title',
+			'post_content' => 'Test content',
+			'post_image' => null,
+			'post_category' => 1
 		]);
 		
-		$response->assertRedirect('/posts/test');
+		$response->assertRedirect('/posts/test-title');
 	}
 
-	public function test_user_cannot_edit_post_of_another_user(): void
+	public function testUserCannotEditPostOfAnotherUser(): void
 	{
 		/**
 		 * @var \Illuminate\Contracts\Auth\Authenticatable
@@ -116,6 +118,6 @@ class PostTest extends TestCase
 		]);
 
 		$response = $this->patch('/posts/' . $post->slug);
-		$response->assertStatus(403);
+		$response->assertForbidden();
 	}
 }
