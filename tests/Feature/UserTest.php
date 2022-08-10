@@ -7,198 +7,122 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserTest extends TestCase
-{
-	use RefreshDatabase;
+{	
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $user1 = null;
 
-    /**
-     * Test if the user list is displayed correctly.
-     *
-     * @return void
-     */
-    public function test_user_list_can_be_rendered(): void
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $user2 = null;
+
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $admin = null;
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		if (is_null(self::$user1))
+		{
+			self::$user1 = User::factory()->create();
+			self::$user2 = User::factory()->create();
+
+			self::$admin = User::factory()->create([
+				'is_admin' => 1
+			]);
+		}
+	}
+
+    public function testUserListCanBeRendered(): void
     {
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
+		$this->actingAs(self::$user1);
         $response = $this->get('/users');
-        $response->assertStatus(200);
+        $response->assertOk();
     }
 
-	public function test_guests_cannot_view_user_list(): void
+	public function testGuestCannotViewUserList(): void
 	{
         $response = $this->get('/users');
         $response->assertRedirect('/login');
 	}
 
-	public function test_normal_user_cannot_see_change_role_selects(): void
+	public function testNormalUserCannotSeeChangeRoleSelect(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($user);
+		$this->actingAs(self::$user1);
 		$response = $this->get('/users');
 		$response->assertDontSee('checkbox');
 	}
 
-	public function test_admin_can_see_change_role_selects(): void
+	public function testAdminCanSeeChangeRoleSelect(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create([
-			'is_admin' => 1
-		]);
-
-		$this->actingAs($user);
+		$this->actingAs(self::$admin);
 		$response = $this->get('/users');
 		$response->assertSee('checkbox');
 	}
 
-	public function test_user_profile_page_can_be_rendered(): void
+	public function testUserProfilePageCanBeRendered(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
-        $response = $this->get('/users/' . $user->id);
-        $response->assertStatus(200);
+		$this->actingAs(self::$user1);
+        $response = $this->get('/users/' . self::$user1->id);
+        $response->assertOk();
 	}
 
-	public function test_guests_cannot_view_profiles(): void
+	public function testEditFormCanBeRendered(): void
 	{
-		$user = User::factory()->create();
-        $response = $this->get('/users/' . $user->id);
-		$response->assertRedirect('/login');
+		$this->actingAs(self::$user1);
+		$response = $this->get('/users/' . self::$user1->id . '/edit');
+		$response->assertOk();
 	}
 
-	public function test_edit_form_can_be_rendered(): void
+	public function testNormalUserCanEditSelf(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-		
-		$this->actingAs($user);
-		$response = $this->get('/users/' . $user->id . '/edit');
-		$response->assertStatus(200);
-	}
+		$this->actingAs(self::$user1);
 
-	public function test_normal_user_can_edit_self(): void
-	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($user);
-
-		$response = $this->patch('/users/' . $user->id, [
+		$response = $this->patch('/users/' . self::$user1->id, [
 			'name' => 'Test change name'
 		]);
 
-		$response->assertRedirect('/users/' . $user->id);
+		$response->assertRedirect('/users/' . self::$user1->id);
 	}
 
-	public function test_normal_user_cannot_edit_other_users(): void
+	public function testNormalUserCannotEditOtherUsers(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user1 = User::factory()->create([
-			'is_admin' => 0
-		]);
+		$this->actingAs(self::$user1);
 
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user2 = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($user1);
-
-		$response = $this->patch('/users/' . $user2->id, [
+		$response = $this->patch('/users/' . self::$user2->id, [
 			'name' => 'Test change name'
 		]);
 
-		$response->assertStatus(403);
+		$response->assertForbidden();
 	}
 
-	public function test_admin_can_edit_users(): void
+	public function testAdminCanEditUsers(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$admin = User::factory()->create([
-			'is_admin' => 1
-		]);
+		$this->actingAs(self::$admin);
 
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($admin);
-
-		$response = $this->patch('/users/' . $user->id, [
+		$response = $this->patch('/users/' . self::$user1->id, [
 			'name' => 'Test change name'
 		]);
 
-		$response->assertRedirect('/users/' . $user->id);
+		$response->assertRedirect('/users/' . self::$user1->id);
 	}
 
-	public function test_normal_user_cannot_delete_users(): void
+	public function testNormalUserCannotDeleteUsers(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user1 = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user2 = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($user1);
-		$response = $this->delete('/users/' . $user2->id);
-		$response->assertStatus(403);
+		$this->actingAs(self::$user1);
+		$response = $this->delete('/users/' . self::$user2->id);
+		$response->assertForbidden();
 	}
 
-	public function test_admin_can_delete_users(): void
+	public function testAdminCanDeleteUsers(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$admin = User::factory()->create([
-			'is_admin' => 1
-		]);
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create([
-			'is_admin' => 0
-		]);
-
-		$this->actingAs($admin);
-		$response = $this->delete('/users/' . $user->id);
+		$this->actingAs(self::$admin);
+		$response = $this->delete('/users/' . self::$user1->id);
 		$response->assertRedirect('/users');
 	}
 }
