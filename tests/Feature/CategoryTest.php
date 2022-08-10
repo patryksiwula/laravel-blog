@@ -11,12 +11,12 @@ class CategoryTest extends TestCase
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $user = null;
+	private static ?User $user = null;
 
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $admin = null;
+	private static ?User $admin = null;
 	
 	public function setUp(): void
 	{

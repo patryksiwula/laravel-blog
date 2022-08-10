@@ -10,17 +10,17 @@ class UserTest extends TestCase
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $user1 = null;
+	private static ?User $user1 = null;
 
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $user2 = null;
+	private static ?User $user2 = null;
 
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $admin = null;
+	private static ?User $admin = null;
 
 	public function setUp(): void
 	{

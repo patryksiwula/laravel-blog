@@ -13,20 +13,20 @@ class CommentTest extends TestCase
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $user1 = null;
+	private static ?User $user1 = null;
 
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $user2 = null;
+	private static ?User $user2 = null;
 
 	/**
 	 * @var \Illuminate\Contracts\Auth\Authenticatable
 	 */
-	protected static ?User $admin = null;
+	private static ?User $admin = null;
 
-	protected static ?Category $category = null;
-	protected static ?Post $post = null;
+	private static ?Category $category = null;
+	private static ?Post $post = null;
 
 	public function setUp(): void
 	{
@@ -159,7 +159,7 @@ class CommentTest extends TestCase
 		$response->assertRedirect('/posts/' . $post->slug);
 	}
 
-	protected function createTestComment(?int $postAuthorId, int $commentAuthorId): Comment
+	private function createTestComment(?int $postAuthorId, int $commentAuthorId): Comment
 	{
 		if (!is_null($postAuthorId))
 			self::$post->update(['user_id' => $postAuthorId]);
