@@ -21,6 +21,7 @@ class CommentFactory extends Factory
         return [
             'user_id' => User::all('id')->random(),
 			'commentable_id' => Post::all('id')->random(),
+			'commentable_type' => 'App\Models\Post',
 			'content' => $this->faker->paragraphs(1, true)
         ];
     }
