@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -31,6 +29,40 @@ class PostTest extends TestCase
 		$post = Post::factory()->create();
 		$response = $this->get('/posts/' . $post->slug);
 		$response->assertOk();
+	}
+
+	public function testCreatePostFormCanBeRendered(): void
+	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user = User::factory()->create();
+
+		$this->actingAs($user);
+		$response = $this->get('/posts/create');
+		$response->assertOk();
+	}
+
+	public function testUserCanCreatePost(): void
+	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user = User::factory()->create();
+
+		$this->actingAs($user);
+
+		Storage::fake('test_uploads');
+		$file = UploadedFile::fake()->image('post_image.jpg');
+
+		$request = $this->post('/posts', [
+			'post_title' => 'Test post',
+			'post_content' => 'Test post content',
+			'post_image' => $file,
+			'post_category' => 1
+		]);
+
+		$request->assertRedirect('/posts/test-post');
 	}
 
 	public function testUserCanDisplayTheEditFormOfHisPost(): void
@@ -119,5 +151,71 @@ class PostTest extends TestCase
 
 		$response = $this->patch('/posts/' . $post->slug);
 		$response->assertForbidden();
+	}
+
+	public function testUserCanDeleteHisPost(): void
+	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user = User::factory()->create();
+
+		$this->actingAs($user);
+		Category::factory()->create();
+
+		$post = Post::factory()->create([
+			'user_id' => $user->id
+		]);
+
+		$response = $this->delete('/posts/' . $post->slug);
+		$response->assertRedirect('/posts');
+	}
+
+	public function testUserCannotDeleteOtheUsersPost(): void
+	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user1 = User::factory()->create();
+
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user2 = User::factory()->create();
+
+		$this->actingAs($user1);
+		Category::factory()->create();
+
+		$post = Post::factory()->create([
+			'user_id' => $user2->id
+		]);
+
+		$response = $this->delete('/posts/' . $post->slug);
+		$response->assertForbidden();
+	}
+
+	public function testAdminCanDeleteOtherUsersPost(): void
+	{
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$admin = User::factory()->create([
+			'is_admin' => 1
+		]);
+
+		/**
+		 * @var \Illuminate\Contracts\Auth\Authenticatable
+		 */
+		$user = User::factory()->create();
+
+		$this->actingAs($admin);
+		Category::factory()->create();
+
+		$post = Post::factory()->create([
+			'user_id' => $user->id
+		]);
+
+		$response = $this->delete('/posts/' . $post->slug);
+		$response->assertRedirect('/posts');
 	}
 }
