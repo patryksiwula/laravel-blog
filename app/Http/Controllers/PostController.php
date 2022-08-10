@@ -115,7 +115,7 @@ class PostController extends Controller
     {
 		$this->authorize('update', $post);
 
-		$post = $postService->updatePost(
+		$updatedPost = $postService->updatePost(
 			$post->id, 
 			$request->input('post_title'), 
 			$request->input('post_content'), 
@@ -125,7 +125,7 @@ class PostController extends Controller
 		);
 
 		return redirect()
-			->route('posts.show', ['post' => $post])
+			->route('posts.show', ['post' => $updatedPost])
 			->with('action', 'post_updated');
     }
 
