@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -37,11 +38,11 @@ class Comment extends Model
 	/**
 	 * Get the post which the comment belongs to
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 * @return \Illuminate\Database\Eloquent\Relations\MorphTo
 	 */
-	public function post(): BelongsTo
+	public function commentable(): MorphTo
 	{
-		return $this->belongsTo(Post::class);
+		return $this->morphTo();
 	}
 	
 	/**
