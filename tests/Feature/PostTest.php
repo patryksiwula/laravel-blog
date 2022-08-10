@@ -11,11 +11,40 @@ use Tests\TestCase;
 
 class PostTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $user1 = null;
+
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $user2 = null;
+
+	/**
+	 * @var \Illuminate\Contracts\Auth\Authenticatable
+	 */
+	protected static ?User $admin = null;
+
+	protected static ?Category $category = null;
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		if (is_null(self::$user1))
+		{
+			self::$user1 = User::factory()->create();
+			self::$user2 = User::factory()->create();
+
+			self::$admin = User::factory()->create([
+				'is_admin' => 1
+			]);
+
+			self::$category = Category::factory()->create();
+		}
+	}
+
     public function testPostsCanBeRendered()
     {
         $response = $this->get('/posts');
@@ -24,59 +53,45 @@ class PostTest extends TestCase
 
 	public function testSinglePostCanBeRendered(): void
 	{
-		User::factory()->create();
-		Category::factory()->create();
-		$post = Post::factory()->create();
+		$post = Post::factory()->create([
+			'category_id' => self::$category->id
+		]);
+
 		$response = $this->get('/posts/' . $post->slug);
 		$response->assertOk();
 	}
 
 	public function testCreatePostFormCanBeRendered(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
+		$this->actingAs(self::$user1);
 		$response = $this->get('/posts/create');
 		$response->assertOk();
 	}
 
 	public function testUserCanCreatePost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
+		$this->actingAs(self::$user1);
 
 		Storage::fake('test_uploads');
 		$file = UploadedFile::fake()->image('post_image.jpg');
 
 		$request = $this->post('/posts', [
-			'post_title' => 'Test post',
+			'post_title' => 'Test post1',
 			'post_content' => 'Test post content',
 			'post_image' => $file,
 			'post_category' => 1
 		]);
 
-		$request->assertRedirect('/posts/test-post');
+		$request->assertRedirect('/posts/test-post1');
 	}
 
 	public function testUserCanDisplayTheEditFormOfHisPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-		
-		$this->actingAs($user);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user->id
+			'user_id' => self::$user1->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->get('/posts/' . $post->slug . '/edit');
@@ -85,21 +100,11 @@ class PostTest extends TestCase
 
 	public function testUserCannotDisplayTheEditFormOfOtherUsersPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user1 = User::factory()->create();
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user2 = User::factory()->create();
-
-		$this->actingAs($user1);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user2->id
+			'user_id' => self::$user2->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->get('/posts/' . $post->slug . '/edit');
@@ -108,86 +113,79 @@ class PostTest extends TestCase
 
 	public function testUserCanEditHisPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user->id
+			'user_id' => self::$user1->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->patch('/posts/' . $post->slug, [
-			'post_title' => 'Test title',
+			'post_title' => 'Test title1',
 			'post_content' => 'Test content',
 			'post_image' => null,
 			'post_category' => 1
 		]);
 		
-		$response->assertRedirect('/posts/test-title');
+		$response->assertRedirect('/posts/test-title1');
 	}
 
-	public function testUserCannotEditPostOfAnotherUser(): void
+	public function testUserCannotEditOtherUsersPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user1 = User::factory()->create();
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user2 = User::factory()->create();
-		
-		$this->actingAs($user1);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user2->id
+			'user_id' => self::$user2->id,
+			'category_id' => self::$category->id
 		]);
 
-		$response = $this->patch('/posts/' . $post->slug);
+		$response = $this->patch('/posts/' . $post->slug, [
+			'post_title' => 'Test title2',
+			'post_content' => 'Test content',
+			'post_image' => null,
+			'post_category' => 1
+		]);
 		$response->assertForbidden();
+	}
+
+	public function testAdminCanEditOtherUsersPost(): void
+	{
+		$this->actingAs(self::$admin);
+
+		$post = Post::factory()->create([
+			'user_id' => self::$user1->id,
+			'category_id' => self::$category->id
+		]);
+
+		$response = $this->patch('/posts/' . $post->slug, [
+			'post_title' => 'Test title3',
+			'post_content' => 'Test content',
+			'post_image' => null,
+			'post_category' => 1
+		]);
+		$response->assertRedirect('/posts/test-title3');
 	}
 
 	public function testUserCanDeleteHisPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($user);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user->id
+			'user_id' => self::$user1->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->delete('/posts/' . $post->slug);
 		$response->assertRedirect('/posts');
 	}
 
-	public function testUserCannotDeleteOtheUsersPost(): void
+	public function testUserCannotDeleteOtherUsersPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user1 = User::factory()->create();
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user2 = User::factory()->create();
-
-		$this->actingAs($user1);
-		Category::factory()->create();
+		$this->actingAs(self::$user1);
 
 		$post = Post::factory()->create([
-			'user_id' => $user2->id
+			'user_id' => self::$user2->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->delete('/posts/' . $post->slug);
@@ -196,23 +194,11 @@ class PostTest extends TestCase
 
 	public function testAdminCanDeleteOtherUsersPost(): void
 	{
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$admin = User::factory()->create([
-			'is_admin' => 1
-		]);
-
-		/**
-		 * @var \Illuminate\Contracts\Auth\Authenticatable
-		 */
-		$user = User::factory()->create();
-
-		$this->actingAs($admin);
-		Category::factory()->create();
+		$this->actingAs(self::$admin);
 
 		$post = Post::factory()->create([
-			'user_id' => $user->id
+			'user_id' => self::$user1->id,
+			'category_id' => self::$category->id
 		]);
 
 		$response = $this->delete('/posts/' . $post->slug);
