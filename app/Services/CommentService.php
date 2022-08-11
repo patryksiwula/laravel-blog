@@ -7,6 +7,19 @@ use Illuminate\Support\Collection;
 
 class CommentService
 {
+	public function createComment(int $user, int $post, string $content, ?int $parent_id): Comment
+	{
+		$comment = Comment::create([
+			'user_id' => $user,
+			'commentable_id' => $post,
+			'commentable_type' => 'App\Models\Post',
+			'parent_id' => $parent_id,
+			'content' => $content
+		]);
+
+		return $comment;
+	}
+	
 	public function generateCommentTree(int $post): Collection
 	{
 		$commentTree = Comment::with(['user', 'parent'])->where('commentable_id', $post)->get();

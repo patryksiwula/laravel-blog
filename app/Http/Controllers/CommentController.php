@@ -6,6 +6,7 @@ use App\Actions\CreateComment;
 use App\Http\Requests\CommentRequest;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Services\CommentService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -21,9 +22,9 @@ class CommentController extends Controller
 		]);
 	}
 
-    public function store(CommentRequest $request, Post $post, CreateComment $createComment): RedirectResponse
+    public function store(CommentRequest $request, Post $post, CommentService $commentService): RedirectResponse
 	{
-		$createComment->handle(
+		$commentService->createComment(
 			auth()->id(),
 			$post->id,
 			$request->input('comment_content'),
