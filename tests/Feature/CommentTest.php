@@ -69,7 +69,7 @@ class CommentTest extends TestCase
 	public function testUserCanViewEditFormOfHisComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(null, self::$user1->id);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
 		$response = $this->get('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id . '/edit');
 		$response->assertOk();
 	}
@@ -77,7 +77,7 @@ class CommentTest extends TestCase
 	public function testUserCannotViewEditFormOfOtherUsersComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(null, self::$user2->id);
+		$comment = $this->createTestComment(null, self::$user2->id, null);
 		$response = $this->get('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id . '/edit');
 		$response->assertForbidden();
 	}
@@ -85,7 +85,7 @@ class CommentTest extends TestCase
 	public function testUserCanEditHisComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(null, self::$user1->id);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
 
 		$response = $this->patch('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id, [
 			'comment_content' => 'Content after update'
@@ -97,7 +97,7 @@ class CommentTest extends TestCase
 	public function testUserCannotEditOtherUsersComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(null, self::$user2->id);
+		$comment = $this->createTestComment(null, self::$user2->id, null);
 
 		$response = $this->patch('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id, [
 			'comment_content' => 'Content after update'
@@ -109,7 +109,7 @@ class CommentTest extends TestCase
 	public function testAdminCanEditOtherUsersComment(): void
 	{
 		$this->actingAs(self::$admin);
-		$comment = $this->createTestComment(null, self::$user1->id);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
 
 		$response = $this->patch('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id, [
 			'comment_content' => 'Content after update'
@@ -121,7 +121,7 @@ class CommentTest extends TestCase
 	public function testUserCanDeleteHisComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(null, self::$user1->id);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
 
 		// Get the post so the user can be redirected back after comment is deleted
 		$post = $comment->commentable;
@@ -132,7 +132,7 @@ class CommentTest extends TestCase
 	public function testUserCannotDeleteOtherUsersComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(self::$user2->id, self::$user2->id);
+		$comment = $this->createTestComment(self::$user2->id, self::$user2->id, null);
 		$response = $this->delete('/posts/' . $comment->commentable->slug . '/comments/' . $comment->id);
 		$response->assertForbidden();
 	}
@@ -140,7 +140,7 @@ class CommentTest extends TestCase
 	public function testPostAuthorCanDeleteOtherUsersComment(): void
 	{
 		$this->actingAs(self::$user1);
-		$comment = $this->createTestComment(self::$user1->id, self::$user2->id);
+		$comment = $this->createTestComment(self::$user1->id, self::$user2->id, null);
 
 		// Get the post so the user can be redirected back after comment is deleted
 		$post = $comment->commentable;
@@ -151,7 +151,7 @@ class CommentTest extends TestCase
 	public function testAdminCanDeleteOtherUsersComment(): void
 	{
 		$this->actingAs(self::$admin);
-		$comment = $this->createTestComment(null, self::$user1->id);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
 
 		// Get the post so the user can be redirected back after comment is deleted
 		$post = $comment->commentable;
@@ -159,16 +159,48 @@ class CommentTest extends TestCase
 		$response->assertRedirect('/posts/' . $post->slug);
 	}
 
-	private function createTestComment(?int $postAuthorId, int $commentAuthorId): Comment
+	public function testUserCanCreateReply(): void
+	{
+		$this->actingAs(self::$user1);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
+
+		$response = $this->post('/posts/' . self::$post->slug . '/comments', [
+			'comment_content' => 'Test comment',
+			'comment' => $comment->id
+		]);
+
+		$response->assertRedirect('/posts/' . self::$post->slug);
+
+	}
+
+	public function testUserCanCreateReplyToReply(): void
+	{
+		$this->actingAs(self::$user1);
+		$comment = $this->createTestComment(null, self::$user1->id, null);
+		$reply = $this->createTestComment(null, self::$user1->id, $comment);
+
+		$response = $this->post('/posts/' . self::$post->slug . '/comments', [
+			'comment_content' => 'Test comment',
+			'comment' => $reply->id
+		]);
+
+		$response->assertRedirect('/posts/' . self::$post->slug);
+	}
+
+	private function createTestComment(?int $postAuthorId, int $commentAuthorId, ?Comment $parent): Comment
 	{
 		if (!is_null($postAuthorId))
 			self::$post->update(['user_id' => $postAuthorId]);
 
-		$comment = Comment::factory()->create([
+		$fill = [
 			'user_id' => $commentAuthorId,
 			'commentable_id' => self::$post->id
-		]);
+		];
 
+		if (!is_null($parent))
+			$fill['parent_id'] = $parent->id;
+
+		$comment = Comment::factory()->create($fill);
 		return $comment;
 	}
 }
