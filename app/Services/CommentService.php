@@ -22,7 +22,7 @@ class CommentService
 	
 	public function generateCommentTree(int $post): Collection
 	{
-		$commentTree = Comment::with(['user', 'parent'])->where('commentable_id', $post)->get();
+		$commentTree = Comment::with(['user', 'commentable', 'parent'])->where('commentable_id', $post)->get();
 		$commentsById = new Collection();
 
 		foreach ($commentTree as $comment)
