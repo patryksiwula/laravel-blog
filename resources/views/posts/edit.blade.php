@@ -1,5 +1,7 @@
 @extends('layouts.content')
 
+@section('title', __('Editing post') . ' - ' . $post->title)
+
 @section('page_title')
 	<h2 class="font-semibold text-2xl text-gray-800 leading-tight">
 		{{ __('Editing of a post') }}

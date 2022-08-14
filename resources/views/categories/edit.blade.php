@@ -1,8 +1,10 @@
 @extends('layouts.content')
 
+@section('title', __('Editing a category'))
+
 @section('page_title')
 	<h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-		{{ __('Editing of a category') }}
+		{{ __('Editing a category') }}
 	</h2>
 @endsection
 

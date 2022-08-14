@@ -1,5 +1,7 @@
 @extends('layouts.content')
 
+@section('title', $post->title)
+
 @section('page_content')
 	<div class="mt-10">
 		<div class="w-full flex justify-center">

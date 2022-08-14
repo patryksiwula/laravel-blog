@@ -1,8 +1,10 @@
 @extends('layouts.content')
 
+@section('title', __('New category'))
+
 @section('page_title')
 	<h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-		{{ __('Creation of a new category') }}
+		{{ __('Creating a new category') }}
 	</h2>
 @endsection
 

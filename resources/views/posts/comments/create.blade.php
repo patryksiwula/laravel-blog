@@ -1,8 +1,10 @@
 @extends('layouts.content')
 
+@section('title', __('New comment'))
+
 @section('page_title')
 	<h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-		{{ __('Creation of a new comment') }}
+		{{ __('Creating a new comment') }}
 	</h2>
 @endsection
 

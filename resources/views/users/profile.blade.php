@@ -1,5 +1,7 @@
 @extends('layouts.content')
 
+@section('title', $user->name . ' - ' . __('Profile'))
+
 @section('page_content')
 	<div class="mt-10">
 		<section class="mt-10 pb-10 lg:pb-20">

@@ -1,5 +1,11 @@
 @extends('layouts.content')
 
+@isset(request()->categories)
+	@section('title', __('Posts of category') . ' ' . App\Models\Category::find(request()->categories)->name)
+@else
+	@section('title', __('Posts'))
+@endisset
+
 @section('page_title')
 	<h2 class="font-semibold text-2xl text-gray-800 leading-tight">
 		{{ __('Posts') }}
